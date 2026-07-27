@@ -1,5 +1,7 @@
 # Nexusnote
 
+> 中文文档（English version: [README.en.md](README.en.md)）
+
 Obsidian 个人知识库仪表盘插件（Agent 操作中心）。在 Obsidian 内部提供一站式知识库概览与快速操作入口，帮助你以「四层知识库」结构管理个人资料。
 
 ## 功能特性
