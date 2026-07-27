@@ -31,3 +31,7 @@ prototype/
 # Personal vault notes (not part of the plugin)
 个人知识库系统-升级版.md
 Nexusnote_项目交接文档.md
+
+# GitHub Actions workflows require the `workflow` OAuth scope to push;
+# excluded from this repo until the publishing token has that scope.
+.github/workflows/
