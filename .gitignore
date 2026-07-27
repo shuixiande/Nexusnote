@@ -32,6 +32,13 @@ prototype/
 个人知识库系统-升级版.md
 Nexusnote_项目交接文档.md
 
+# Project-internal docs (not intended for the public repo)
+AGENTS.md
+CLAUDE.md
+CODE_REVIEW.md
+Nexusnote插件.md
+为Obsidian搭建Nexusnote插件.md
+
 # GitHub Actions workflows require the `workflow` OAuth scope to push;
 # excluded from this repo until the publishing token has that scope.
 .github/workflows/
