@@ -35,15 +35,16 @@ Obsidian 个人知识库仪表盘插件（Agent 操作中心）。在 Obsidian �
 - `npm run build` —— 类型检查 + 生产构建（输出 `main.js`）
 - `npm run lint` —— ESLint 检查（含 `eslint-plugin-obsidianmd` 规则）
 
-## 手动安装插件
+## 安装
 
-将以下三个文件复制到你的 Vault：`VaultFolder/.obsidian/plugins/Nexusnote/`
+详见 **[安装说明.md](安装说明.md)**，提供四种方式：
 
-- `main.js`
-- `manifest.json`
-- `styles.css`
+- **社区插件市场**（上架后，推荐）
+- **BRAT** —— 添加 beta 仓库 `shuixiande/Nexusnote`
+- **手动安装** —— 从 [GitHub Release](https://github.com/shuixiande/Nexusnote/releases) 下载 `main.js`、`manifest.json`、`styles.css`，复制到 `VaultFolder/.obsidian/plugins/Nexusnote/`
+- **源码构建** —— `npm install && npm run build`
 
-> 注：本仓库 `.gitignore` 忽略 `main.js`（构建产物）。发布时请通过 GitHub Release 上传这三个文件，并将 `manifest.json` 同时放在仓库根与 Release 中。
+> 本仓库已纳入 `main.js`（构建产物），可直接从仓库获取；但发布版本请以 GitHub Release 中的三文件为准，确保与 `manifest.json` 版本一致。
 
 ## 发布新版本
 
