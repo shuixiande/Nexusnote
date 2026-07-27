@@ -1,0 +1,529 @@
+/* ============================================================
+   Nexusnote Dashboard — 插件样式
+   深色仪表盘 / 细边框 / 高信息密度 / 克制强调色 / 等宽字体
+   100% 填充 Obsidian ItemView 内容区
+   ============================================================ */
+
+/* ---- 根容器 ---- */
+.nexusnote-db {
+	padding: 20px 22px 28px;
+	font-family: 'JetBrains Mono', 'Cascadia Code', 'SF Mono', 'Menlo',
+		'Consolas', ui-monospace, 'Courier New', monospace;
+	font-size: 13px;
+	line-height: 1.5;
+	color: #d8dae0;
+	background: #0d0f12;
+	height: 100%;
+	overflow-y: auto;
+	box-sizing: border-box;
+}
+
+.nxdb-root { max-width: 1100px; margin: 0 auto; }
+
+.nexusnote-db ::-webkit-scrollbar { height: 8px; width: 8px; }
+.nexusnote-db ::-webkit-scrollbar-track { background: transparent; }
+.nexusnote-db ::-webkit-scrollbar-thumb { background: rgba(150, 165, 190, 0.20); border-radius: 4px; }
+
+/* ---- CSS Variables (scoped) ---- */
+.nxdb-root {
+	--nxdb-panel: #14161b;
+	--nxdb-panel-raised: #181b21;
+	--nxdb-border: rgba(150, 165, 190, 0.10);
+	--nxdb-border-strong: rgba(150, 165, 190, 0.20);
+	--nxdb-text: #d8dae0;
+	--nxdb-text-dim: #8b919c;
+	--nxdb-text-faint: #565b66;
+	--nxdb-accent: #56c7d8;
+	--nxdb-accent-dim: rgba(86, 199, 216, 0.14);
+	--nxdb-accent-soft: rgba(86, 199, 216, 0.08);
+	--nxdb-green: #6fbf7d;
+	--nxdb-amber: #d6a648;
+	--nxdb-red: #d4625c;
+	--nxdb-gap: 14px;
+}
+
+/* ======== Header ======== */
+.nxdb-header {
+	display: flex;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 20px;
+	padding-bottom: 16px;
+	border-bottom: 1px solid var(--nxdb-border);
+}
+.nxdb-brand__eyebrow {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+	font-size: 11px;
+	letter-spacing: .16em;
+	text-transform: uppercase;
+	color: var(--nxdb-text-dim);
+}
+.nxdb-brand__dot {
+	width: 6px; height: 6px;
+	border-radius: 50%;
+	background: var(--nxdb-accent);
+	box-shadow: 0 0 8px var(--nxdb-accent-dim);
+}
+.nxdb-brand__title {
+	margin: 5px 0 0;
+	font-size: 20px;
+	font-weight: 600;
+	letter-spacing: .01em;
+	color: var(--nxdb-text);
+}
+.nxdb-header__meta { display: flex; align-items: center; gap: 14px; }
+.nxdb-status-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+	padding: 4px 10px;
+	font-family: inherit;
+	font-size: 11px;
+	font-weight: 600;
+	letter-spacing: .14em;
+	color: var(--nxdb-green);
+	background: rgba(111, 191, 125, 0.08);
+	border: 1px solid rgba(111, 191, 125, 0.25);
+	border-radius: 4px;
+	cursor: pointer;
+}
+.nxdb-status-chip:hover { background: rgba(111, 191, 125, 0.14); }
+.nxdb-status-chip:active { background: rgba(111, 191, 125, 0.06); transform: translateY(1px); }
+.nxdb-status-chip__pulse {
+	width: 7px; height: 7px;
+	border-radius: 50%;
+	background: var(--nxdb-green);
+	box-shadow: 0 0 0 0 rgba(111, 191, 125, 0.5);
+	animation: nxdb-pulse 2s infinite;
+}
+@keyframes nxdb-pulse {
+	0% { box-shadow: 0 0 0 0 rgba(111,191,125,0.5); }
+	70% { box-shadow: 0 0 0 6px rgba(111,191,125,0); }
+	100% { box-shadow: 0 0 0 0 rgba(111,191,125,0); }
+}
+.nxdb-sync-time { font-size: 11.5px; color: var(--nxdb-text-dim); letter-spacing: .02em; }
+.nxdb-icon-btn {
+	display: inline-flex; align-items: center; gap: 5px;
+	padding: 4px 10px;
+	font-family: inherit; font-size: 12px;
+	color: var(--nxdb-text);
+	background: var(--nxdb-panel);
+	border: 1px solid var(--nxdb-border);
+	border-radius: 4px;
+	cursor: pointer;
+}
+.nxdb-icon-btn:hover { background: var(--nxdb-panel-raised); border-color: var(--nxdb-border-strong); color: var(--nxdb-accent); }
+.nxdb-icon-btn:active { background: var(--nxdb-panel); transform: translateY(1px); }
+
+/* 一键部署知识库按钮（header 主操作） */
+.nxdb-deploy-btn {
+	display: inline-flex; align-items: center; gap: 5px;
+	padding: 5px 12px;
+	font-family: inherit; font-size: 12px; font-weight: 600;
+	color: #fff;
+	background: var(--nxdb-accent);
+	border: 1px solid var(--nxdb-accent-dim, var(--nxdb-accent));
+	border-radius: 6px;
+	cursor: pointer;
+}
+.nxdb-deploy-btn:hover { filter: brightness(1.08); }
+.nxdb-deploy-btn:active { transform: translateY(1px); }
+
+/* 隐藏的文件选择 input（导入素材时使用） */
+.nxdb-hidden-file { display: none; }
+
+/* ======== Action Bar ======== */
+.nxdb-actions {
+	display: flex; flex-wrap: wrap; gap: 8px;
+	padding: 12px 0 16px;
+	border-bottom: 1px solid var(--nxdb-border);
+	margin-bottom: var(--nxdb-gap);
+}
+.nxdb-act-btn {
+	display: inline-flex; align-items: center; gap: 7px;
+	padding: 6px 12px;
+	font-family: inherit; font-size: 12px;
+	color: var(--nxdb-text);
+	background: var(--nxdb-panel);
+	border: 1px solid var(--nxdb-border);
+	border-radius: 4px;
+	cursor: pointer;
+	position: relative;
+}
+.nxdb-act-btn::before {
+	content: '';
+	width: 5px; height: 5px;
+	border-radius: 1px;
+	background: var(--nxdb-text-faint);
+}
+.nxdb-act-btn:hover { background: var(--nxdb-panel-raised); border-color: var(--nxdb-border-strong); }
+.nxdb-act-btn:hover::before { background: var(--nxdb-accent); }
+.nxdb-act-btn:active { background: var(--nxdb-panel); transform: translateY(1px); }
+.nxdb-act-btn.nxdb-is-active {
+	background: rgba(86, 199, 216, 0.15);
+	border-color: rgba(86, 199, 216, 0.3);
+	color: var(--nxdb-accent);
+}
+
+/* ======== Grid Rows ======== */
+.nxdb-row { display: grid; gap: var(--nxdb-gap); }
+.nxdb-row--stats  { grid-template-columns: repeat(5, minmax(0, 1fr)); margin-bottom: var(--nxdb-gap); }
+.nxdb-row--charts { grid-template-columns: 1fr 1fr; margin-top: var(--nxdb-gap); }
+.nxdb-row--lists  { grid-template-columns: 220px 1fr 1fr; margin-top: var(--nxdb-gap); }
+
+/* ======== Card ======== */
+.nxdb-card {
+	background: var(--nxdb-panel);
+	border: 1px solid var(--nxdb-border);
+	border-radius: 6px;
+	padding: 14px;
+}
+.nxdb-card__head {
+	display: flex; align-items: flex-start; justify-content: space-between;
+	gap: 12px; margin-bottom: 12px;
+}
+.nxdb-card__title { margin: 0; font-size: 13px; font-weight: 600; color: var(--nxdb-text); }
+.nxdb-card__sub { display: block; margin-top: 2px; font-size: 10.5px; color: var(--nxdb-text-faint); }
+.nxdb-card__meta { font-size: 10.5px; color: var(--nxdb-text-dim); text-align: right; white-space: nowrap; }
+
+/* ======== Stat Cards ======== */
+.nxdb-stat { display: flex; flex-direction: column; gap: 8px; position: relative; overflow: hidden; }
+.nxdb-stat__head { display: flex; align-items: center; justify-content: space-between; }
+.nxdb-stat__label { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--nxdb-text-dim); }
+.nxdb-stat__icon { color: var(--nxdb-text-faint); opacity: .7; line-height: 0; }
+.nxdb-stat__value { font-size: 24px; font-weight: 600; line-height: 1; color: var(--nxdb-text); }
+.nxdb-stat__delta { font-size: 10px; color: var(--nxdb-text-dim); }
+.nxdb-stat__delta--up { color: var(--nxdb-green); }
+.nxdb-stat__delta--down { color: var(--nxdb-red); }
+.nxdb-stat__strip {
+	position: absolute; left: 0; bottom: 0; height: 2px; width: 100%;
+	background: linear-gradient(90deg, transparent 0%, var(--nxdb-accent-dim) 40%, var(--nxdb-accent) 80%, transparent 100%);
+	opacity: .45;
+}
+
+/* ======== Line Chart (笔记创建趋势) ======== */
+.nxdb-card--linechart { padding: 16px 16px 12px; }
+.nxdb-card--linechart .nxdb-card__head { align-items: center; }
+.nxdb-card__controls {
+	display: flex; gap: 6px; justify-content: flex-end;
+	margin: -2px 0 10px;
+}
+.nxdb-chn-btn {
+	padding: 3px 10px;
+	font-family: inherit; font-size: 11px;
+	color: var(--nxdb-text-dim);
+	background: var(--nxdb-panel-raised);
+	border: 1px solid var(--nxdb-border);
+	border-radius: 4px;
+	cursor: pointer;
+	transition: color .12s, background .12s, border-color .12s;
+}
+.nxdb-chn-btn:hover { color: var(--nxdb-accent); border-color: var(--nxdb-border-strong); }
+.nxdb-chn-btn:active { transform: translateY(1px); }
+.nxdb-chn-btn--active {
+	color: var(--nxdb-accent);
+	background: var(--nxdb-accent-soft);
+	border-color: rgba(86, 199, 216, 0.35);
+}
+.nxdb-card__chart { position: relative; margin-top: 2px; }
+.nxdb-linechart__svg { display: block; width: 100%; height: auto; }
+.nxdb-linechart__grid { stroke: rgba(150, 165, 190, 0.08); stroke-width: 1; }
+.nxdb-linechart__ylabel,
+.nxdb-linechart__xlabel {
+	fill: var(--nxdb-text-faint);
+	font-family: inherit;
+	font-size: 9px;
+}
+.nxdb-linechart__line {
+	fill: none;
+	stroke: var(--nxdb-accent);
+	stroke-width: 1.6;
+	stroke-linejoin: round;
+	stroke-linecap: round;
+}
+.nxdb-linechart__dot { fill: var(--nxdb-accent); }
+.nxdb-linechart__cross {
+	stroke: var(--nxdb-accent);
+	stroke-width: 1;
+	stroke-dasharray: 3 3;
+	opacity: 0;
+	transition: opacity .1s;
+}
+.nxdb-linechart__hover-dot {
+	fill: var(--nxdb-accent);
+	stroke: var(--nxdb-panel);
+	stroke-width: 1.5;
+	opacity: 0;
+	transition: opacity .1s;
+}
+.nxdb-linechart__tip {
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity .1s;
+}
+.nxdb-linechart__tip-bg {
+	fill: var(--nxdb-panel-raised);
+	stroke: var(--nxdb-border-strong);
+	stroke-width: 1;
+}
+.nxdb-linechart__tip-text {
+	fill: var(--nxdb-text);
+	font-family: inherit;
+	font-size: 10.5px;
+}
+.nxdb-is-visible.nxdb-linechart__cross { opacity: 0.6; }
+.nxdb-is-visible.nxdb-linechart__hover-dot { opacity: 1; }
+.nxdb-is-visible.nxdb-linechart__tip { opacity: 1; }
+.nxdb-linechart__empty {
+	display: block;
+	padding: 44px 0;
+	text-align: center;
+	font-size: 12px;
+	color: var(--nxdb-text-faint);
+}
+
+/* ======== Category Bars ======== */
+.nxdb-card--bars { padding: 16px 16px 12px; }
+.nxdb-barlist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.nxdb-barlist li { display: flex; align-items: center; gap: 12px; }
+.nxdb-bar__label { flex-shrink: 0; width: 80px; font-size: 11.5px; color: var(--nxdb-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nxdb-bar__track { flex: 1; height: 20px; background: rgba(255,255,255,0.03); border-radius: 4px; overflow: hidden; }
+.nxdb-bar__fill { height: 100%; border-radius: 4px; transition: width .65s cubic-bezier(.22,.61,.36,1); box-shadow: inset 0 1px 0 rgba(255,255,255,0.15); }
+.nxdb-bar__count { flex-shrink: 0; width: 28px; text-align: right; font-size: 12px; font-weight: 600; color: var(--nxdb-text); }
+
+/* ======== Calendar ======== */
+.nxdb-card--cal { padding: 12px 10px 10px; }
+.nxdb-card--cal .nxdb-card__head { margin-bottom: 6px; }
+.nxdb-calendar { display: flex; flex-direction: column; gap: 1px; }
+.nxdb-cal__weekdays {
+	display: grid; grid-template-columns: repeat(7, 1fr);
+	text-align: center; font-size: 9.5px; color: var(--nxdb-text-faint); padding-bottom: 2px;
+}
+.nxdb-cal__grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+.nxdb-cal__cell {
+	aspect-ratio: 1;
+	display: flex; align-items: center; justify-content: center;
+	border-radius: 3px; font-size: 10.5px; color: var(--nxdb-text-dim);
+	position: relative;
+}
+.nxdb-cal__cell--empty { pointer-events: none; }
+.nxdb-cal__cell--clickable {
+	cursor: pointer;
+	transition: background .12s, color .12s, box-shadow .12s;
+}
+.nxdb-cal__cell--clickable:hover {
+	background: rgba(86, 199, 216, 0.10);
+	color: var(--nxdb-text);
+}
+.nxdb-cal__cell--clickable:active {
+	background: rgba(86, 199, 216, 0.05);
+	transform: translateY(1px);
+}
+.nxdb-cal__cell--today {
+	color: var(--nxdb-accent); font-weight: 600;
+	box-shadow: inset 0 0 0 1px var(--nxdb-accent-dim);
+}
+.nxdb-cal__cell--has-notes::after {
+	content: ''; position: absolute;
+	bottom: 3px; width: 4px; height: 4px;
+	border-radius: 50%; background: var(--nxdb-green); opacity: .8;
+}
+.nxdb-cal__cell--has-notes.nxdb-cal__cell--today::after {
+	background: var(--nxdb-accent);
+}
+
+/* ---- 月份导航按钮 ---- */
+.nxdb-cal-nav { display: flex; align-items: center; gap: 4px; }
+.nxdb-cal-nav__btn {
+	display: inline-flex; align-items: center; justify-content: center;
+	width: 22px; height: 22px;
+	padding: 0;
+	font-family: inherit; font-size: 11px;
+	color: var(--nxdb-text-dim);
+	background: transparent;
+	border: 1px solid var(--nxdb-border);
+	border-radius: 3px;
+	cursor: pointer;
+}
+.nxdb-cal-nav__btn:hover {
+	background: var(--nxdb-panel-raised);
+	border-color: var(--nxdb-border-strong);
+	color: var(--nxdb-accent);
+}
+.nxdb-cal-nav__btn:active { background: var(--nxdb-panel); transform: translateY(1px); }
+.nxdb-cal-nav__btn--today { width: auto; padding: 0 8px; }
+
+/* ======== Task List ======== */
+.nxdb-tasklist, .nxdb-recentlist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.nxdb-tasklist li { display: flex; align-items: center; gap: 10px; padding: 10px 4px; border-bottom: 1px solid var(--nxdb-border); }
+.nxdb-tasklist li:last-child { border-bottom: none; }
+.nxdb-task__check {
+	width: 14px; height: 14px; border-radius: 3px;
+	border: 1px solid var(--nxdb-border-strong); flex-shrink: 0;
+}
+.nxdb-task--done .nxdb-task__check { background: var(--nxdb-green); border-color: var(--nxdb-green); }
+.nxdb-task--doing .nxdb-task__check { border-color: var(--nxdb-amber); position: relative; }
+.nxdb-task--doing .nxdb-task__check::after {
+	content: ''; position: absolute; top: 3px; left: 3px;
+	width: 6px; height: 6px; border-radius: 1px; background: var(--nxdb-amber);
+}
+.nxdb-task__main { flex: 1; min-width: 0; }
+.nxdb-task__title { font-size: 12px; color: var(--nxdb-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nxdb-task--done .nxdb-task__title { color: var(--nxdb-text-dim); text-decoration: line-through; text-decoration-color: var(--nxdb-text-faint); }
+.nxdb-task__meta { display: flex; align-items: center; gap: 8px; margin-top: 2px; font-size: 10px; color: var(--nxdb-text-faint); }
+.nxdb-tag { padding: 0 5px; border-radius: 2px; font-size: 9px; letter-spacing: .08em; text-transform: uppercase; color: var(--nxdb-text-dim); background: rgba(150,165,190,0.07); border: 1px solid var(--nxdb-border); }
+.nxdb-badge { font-size: 9px; letter-spacing: .1em; padding: 1px 6px; border-radius: 2px; white-space: nowrap; }
+.nxdb-badge--done { color: var(--nxdb-green); background: rgba(111,191,125,0.08); border: 1px solid rgba(111,191,125,0.2); }
+.nxdb-badge--doing { color: var(--nxdb-amber); background: rgba(214,166,72,0.08); border: 1px solid rgba(214,166,72,0.2); }
+.nxdb-badge--todo { color: var(--nxdb-text-dim); background: rgba(150,165,190,0.05); border: 1px solid var(--nxdb-border); }
+
+/* ======== Recent List（最近更新） ======== */
+.nxdb-recentlist li {
+	display: flex; align-items: center; gap: 10px;
+	padding: 9px 4px; border-bottom: 1px solid var(--nxdb-border);
+	cursor: pointer; transition: background .12s;
+}
+.nxdb-recentlist li:last-child { border-bottom: none; }
+.nxdb-recentlist li:hover { background: rgba(150,165,190,0.05); }
+.nxdb-recent__main { flex: 1; min-width: 0; }
+.nxdb-recent__title {
+	font-size: 12px; color: var(--nxdb-text);
+	white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.nxdb-recent__folder {
+	font-size: 10px; color: var(--nxdb-text-faint); margin-top: 2px;
+	white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.nxdb-recent__time {
+	flex-shrink: 0; font-size: 10px; color: var(--nxdb-text-faint);
+	white-space: nowrap;
+}
+
+/* 通用空状态 */
+.nxdb-empty { display: block; padding: 28px 0; text-align: center; font-size: 12px; color: var(--nxdb-text-faint); }
+
+/* ======== Footer ======== */
+.nxdb-footer {
+	margin-top: 22px; padding-top: 12px;
+	border-top: 1px solid var(--nxdb-border);
+	font-size: 10px; color: var(--nxdb-text-faint);
+}
+
+/* ======== Responsive ======== */
+@media (max-width: 940px) {
+	.nxdb-row--stats { grid-template-columns: repeat(3, 1fr); }
+	.nxdb-row--charts { grid-template-columns: 1fr; }
+	.nxdb-row--lists { grid-template-columns: 1fr; }
+}
+@media (max-width: 520px) {
+	.nxdb-row--stats { grid-template-columns: 1fr; }
+	.nxdb-header { flex-direction: column; align-items: flex-start; }
+}
+
+/* ======== Template Picker Modal ======== */
+.nxdb-modal .nxdb-modal__title {
+	margin: 0 0 4px;
+	font-size: 16px;
+	font-weight: 500;
+	color: var(--nxdb-text);
+}
+.nxdb-modal .nxdb-modal__desc {
+	margin: 0 0 16px;
+	font-size: 12px;
+	color: var(--nxdb-text-dim);
+}
+.nxdb-modal .nxdb-modal__item {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	width: 100%;
+	padding: 10px 14px;
+	margin-bottom: 4px;
+	font-family: var(--mono, inherit);
+	font-size: 13px;
+	color: var(--nxdb-text);
+	background: transparent;
+	border: 1px solid var(--border, rgba(150,165,190,0.1));
+	border-radius: 6px;
+	cursor: pointer;
+	text-align: left;
+	transition: background .12s, border-color .12s;
+}
+.nxdb-modal .nxdb-modal__item:hover {
+	background: var(--background-modifier-hover, rgba(255,255,255,0.05));
+	border-color: var(--interactive-accent, #56c7d8);
+}
+.nxdb-modal .nxdb-modal__icon {
+	display: flex;
+	align-items: center;
+	color: var(--nxdb-text-dim, #8b919c);
+}
+.nxdb-modal .nxdb-modal__divider {
+	height: 1px;
+	background: var(--border, rgba(150,165,190,0.1));
+	margin: 10px 0;
+}
+
+/* 多行 item 样式：图标 + (标题 + 副标题) */
+.nxdb-modal .nxdb-modal__item-text {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	flex: 1;
+	min-width: 0;
+}
+.nxdb-modal .nxdb-modal__item-title {
+	font-size: 13px;
+	color: var(--nxdb-text, #d8dae0);
+	font-weight: 500;
+}
+.nxdb-modal .nxdb-modal__item-sub {
+	font-size: 10.5px;
+	color: var(--nxdb-text-dim, #8b919c);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.nxdb-modal .nxdb-modal__item--primary {
+	border-color: var(--interactive-accent, rgba(86,199,216,0.4));
+	background: rgba(86, 199, 216, 0.06);
+}
+.nxdb-modal .nxdb-modal__item--primary:hover {
+	background: rgba(86, 199, 216, 0.12);
+}
+.nxdb-modal .nxdb-modal__item--primary .nxdb-modal__icon {
+	color: var(--nxdb-accent, #56c7d8);
+}
+
+/* ======== Modal 自适应高度（日历「今天的日记」/ 新素材 等弹窗） ======== */
+/* 容器高度跟随页面：最高 88vh，超出则内容内部滚动，避免弹窗被截断 */
+.nxdb-modal {
+	max-height: 88vh;
+	display: flex;
+	flex-direction: column;
+}
+.nxdb-modal .modal-content {
+	overflow-y: auto;
+	padding: 22px 22px 24px;
+	/* 允许在父级 max-height 约束内收缩，内容超长时内部滚动而非整体溢出截断 */
+	min-height: 0;
+	flex: 1 1 auto;
+}
+/* 多行 item 副文案允许换行（默认 nowrap 会截断长文案），确保文字与内容完整显示 */
+.nxdb-modal .nxdb-modal__item-sub {
+	white-space: normal;
+	overflow: visible;
+	text-overflow: clip;
+}
+/* 新素材弹窗：高度同样自适应（最高 88vh，超出内部滚动）；保留最小高度以容纳三项选项与说明 */
+.nxdb-modal--material {
+	max-height: 88vh;
+	display: flex;
+	flex-direction: column;
+}
+.nxdb-modal--material .modal-content {
+	min-height: 320px;
+	overflow-y: auto;
+}

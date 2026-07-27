@@ -1,0 +1,33 @@
+# vscode
+.vscode 
+
+# Intellij
+*.iml
+.idea
+
+# npm
+node_modules
+
+# Don't include the compiled main.js file in the repo.
+# They should be uploaded to GitHub releases instead.
+main.js
+
+# Exclude sourcemaps
+*.map
+
+# obsidian
+data.json
+
+# Exclude macOS Finder (System Explorer) View States
+.DS_Store
+
+# Personal vault config & assistant memory — must NEVER be published
+.obsidian/
+.workbuddy/
+
+# Prototype / scratch folder
+prototype/
+
+# Personal vault notes (not part of the plugin)
+个人知识库系统-升级版.md
+Nexusnote_项目交接文档.md
