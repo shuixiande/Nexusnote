@@ -123,9 +123,9 @@ npm run build
 
 | 微信支付 | 支付宝 |
 |----------|--------|
-| ![微信收款码](assets/wechat-pay.svg) | ![支付宝收款码](assets/alipay-pay.svg) |
+| ![微信收款码](assets/wechat-pay.jpg) | ![支付宝收款码](assets/alipay-pay.jpg) |
 
-> 上图为占位图。请替换为你的真实微信 / 支付宝收款码：把图片放到 `assets/wechat-pay.svg` 与 `assets/alipay-pay.svg` 覆盖同名文件即可（或换成 `.png`/`.jpg` 并相应修改上方链接）。
+> 扫描上方二维码即可通过微信或支付宝请我喝杯咖啡 ☕。
 
 ## API 文档
 

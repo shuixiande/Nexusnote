@@ -41,3 +41,7 @@ Nexusnote插件.md
 # GitHub Actions workflows require the `workflow` OAuth scope to push;
 # excluded from this repo until the publishing token has that scope.
 .github/workflows/
+
+# Raw payment QR images live in the vault root; the published copies are in assets/
+微信收款码.jpg
+支付宝收款码.jpg

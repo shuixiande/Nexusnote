@@ -123,9 +123,9 @@ If this plugin helps with your knowledge management, feel free to buy me a coffe
 
 | WeChat Pay | Alipay |
 |------------|--------|
-| ![WeChat QR](assets/wechat-pay.svg) | ![Alipay QR](assets/alipay-pay.svg) |
+| ![WeChat QR](assets/wechat-pay.jpg) | ![Alipay QR](assets/alipay-pay.jpg) |
 
-> The images above are placeholders. Replace them with your real WeChat / Alipay payment QR codes by overwriting `assets/wechat-pay.svg` and `assets/alipay-pay.svg` (or swap in a `.png`/`.jpg` and update the links above).
+> Scan the QR codes above to buy me a coffee ☕ via WeChat Pay or Alipay.
 
 ## API documentation
 
