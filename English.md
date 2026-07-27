@@ -1,6 +1,6 @@
 # Nexusnote
 
-> English version. 中文文档见 [README.md](README.md).
+>【English】 【[中文](README)】
 
 An Obsidian dashboard plugin for your personal knowledge base — an in-app **Agent Operation Center**. It gives you a one-stop overview and quick-action hub to manage your notes using a four-layer knowledge base structure.
 
@@ -116,6 +116,16 @@ Settings → Community plugins → Installed → Nexusnote → **Disable / Unins
 1. Update the version number and minimum required Obsidian version in `manifest.json`.
 2. Add an entry `"new-version": "minimum-obsidian-version"` in `versions.json`.
 3. Create a GitHub Release tagged with the version number, uploading `manifest.json`, `main.js`, and `styles.css`.
+
+## Buy me a coffee ☕
+
+If this plugin helps with your knowledge management, feel free to buy me a coffee ☕ — your support keeps me maintaining it.
+
+| WeChat Pay | Alipay |
+|------------|--------|
+| ![WeChat QR](assets/wechat-pay.svg) | ![Alipay QR](assets/alipay-pay.svg) |
+
+> The images above are placeholders. Replace them with your real WeChat / Alipay payment QR codes by overwriting `assets/wechat-pay.svg` and `assets/alipay-pay.svg` (or swap in a `.png`/`.jpg` and update the links above).
 
 ## API documentation
 

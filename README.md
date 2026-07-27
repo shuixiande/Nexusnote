@@ -1,6 +1,6 @@
 # Nexusnote
 
-> 中文文档（English version: [README.en.md](README.en.md)）
+> 【中文】【[English](English.md)】
 
 Obsidian 个人知识库仪表盘插件（Agent 操作中心）。在 Obsidian 内部提供一站式知识库概览与快速操作入口，帮助你以「四层知识库」结构管理个人资料。
 
@@ -116,6 +116,16 @@ npm run build
 1. 在 `manifest.json` 更新版本号与所需最低 Obsidian 版本。
 2. 在 `versions.json` 增加 `"新版本号": "最低obsidian版本"` 条目。
 3. 以版本号作为 Tag 创建 GitHub Release，上传 `manifest.json`、`main.js`、`styles.css`。
+
+## 请我喝杯咖啡 ☕
+
+如果这个插件对你的知识管理有帮助，欢迎请我喝杯咖啡 ☕，你的支持是我持续维护的动力。
+
+| 微信支付 | 支付宝 |
+|----------|--------|
+| ![微信收款码](assets/wechat-pay.svg) | ![支付宝收款码](assets/alipay-pay.svg) |
+
+> 上图为占位图。请替换为你的真实微信 / 支付宝收款码：把图片放到 `assets/wechat-pay.svg` 与 `assets/alipay-pay.svg` 覆盖同名文件即可（或换成 `.png`/`.jpg` 并相应修改上方链接）。
 
 ## API 文档
 
