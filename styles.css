@@ -1,6 +1,7 @@
 /* ============================================================
    Nexusnote Dashboard — 插件样式
-   深色仪表盘 / 细边框 / 高信息密度 / 克制强调色 / 等宽字体
+   配色全部桥接 Obsidian 默认主题变量（自动跟随浅色/深色）
+   细边框 / 高信息密度 / 等宽字体
    100% 填充 Obsidian ItemView 内容区
    ============================================================ */
 
@@ -11,8 +12,8 @@
 		'Consolas', ui-monospace, 'Courier New', monospace;
 	font-size: 13px;
 	line-height: 1.5;
-	color: #d8dae0;
-	background: #0d0f12;
+	color: var(--text-normal);
+	background: var(--background-primary);
 	height: 100%;
 	overflow-y: auto;
 	box-sizing: border-box;
@@ -22,23 +23,23 @@
 
 .nexusnote-db ::-webkit-scrollbar { height: 8px; width: 8px; }
 .nexusnote-db ::-webkit-scrollbar-track { background: transparent; }
-.nexusnote-db ::-webkit-scrollbar-thumb { background: rgba(150, 165, 190, 0.20); border-radius: 4px; }
+.nexusnote-db ::-webkit-scrollbar-thumb { background: var(--background-modifier-border-hover); border-radius: 4px; }
 
-/* ---- CSS Variables (scoped) ---- */
+/* ---- CSS Variables（桥接到 Obsidian 默认主题，不单独设计配色） ---- */
 .nxdb-root {
-	--nxdb-panel: #14161b;
-	--nxdb-panel-raised: #181b21;
-	--nxdb-border: rgba(150, 165, 190, 0.10);
-	--nxdb-border-strong: rgba(150, 165, 190, 0.20);
-	--nxdb-text: #d8dae0;
-	--nxdb-text-dim: #8b919c;
-	--nxdb-text-faint: #565b66;
-	--nxdb-accent: #56c7d8;
-	--nxdb-accent-dim: rgba(86, 199, 216, 0.14);
-	--nxdb-accent-soft: rgba(86, 199, 216, 0.08);
-	--nxdb-green: #6fbf7d;
-	--nxdb-amber: #d6a648;
-	--nxdb-red: #d4625c;
+	--nxdb-panel: var(--background-secondary);
+	--nxdb-panel-raised: var(--background-secondary-alt);
+	--nxdb-border: var(--background-modifier-border);
+	--nxdb-border-strong: var(--background-modifier-border-hover);
+	--nxdb-text: var(--text-normal);
+	--nxdb-text-dim: var(--text-muted);
+	--nxdb-text-faint: var(--text-faint);
+	--nxdb-accent: var(--interactive-accent);
+	--nxdb-accent-dim: var(--background-modifier-active-hover);
+	--nxdb-accent-soft: var(--background-modifier-active-hover);
+	--nxdb-green: var(--color-green);
+	--nxdb-amber: var(--color-yellow);
+	--nxdb-red: var(--color-red);
 	--nxdb-gap: 14px;
 }
 
@@ -84,24 +85,24 @@
 	font-weight: 600;
 	letter-spacing: .14em;
 	color: var(--nxdb-green);
-	background: rgba(111, 191, 125, 0.08);
-	border: 1px solid rgba(111, 191, 125, 0.25);
+	background: var(--background-modifier-success);
+	border: 1px solid var(--color-green);
 	border-radius: 4px;
 	cursor: pointer;
 }
-.nxdb-status-chip:hover { background: rgba(111, 191, 125, 0.14); }
-.nxdb-status-chip:active { background: rgba(111, 191, 125, 0.06); transform: translateY(1px); }
+.nxdb-status-chip:hover { background: var(--background-modifier-success); }
+.nxdb-status-chip:active { background: var(--background-modifier-success); transform: translateY(1px); }
 .nxdb-status-chip__pulse {
 	width: 7px; height: 7px;
 	border-radius: 50%;
 	background: var(--nxdb-green);
-	box-shadow: 0 0 0 0 rgba(111, 191, 125, 0.5);
+	box-shadow: 0 0 0 0 var(--color-green);
 	animation: nxdb-pulse 2s infinite;
 }
 @keyframes nxdb-pulse {
-	0% { box-shadow: 0 0 0 0 rgba(111,191,125,0.5); }
-	70% { box-shadow: 0 0 0 6px rgba(111,191,125,0); }
-	100% { box-shadow: 0 0 0 0 rgba(111,191,125,0); }
+	0% { box-shadow: 0 0 0 0 var(--color-green); }
+	70% { box-shadow: 0 0 0 6px var(--color-green); }
+	100% { box-shadow: 0 0 0 0 var(--color-green); }
 }
 .nxdb-sync-time { font-size: 11.5px; color: var(--nxdb-text-dim); letter-spacing: .02em; }
 .nxdb-icon-btn {
@@ -122,7 +123,7 @@
 	display: inline-flex; align-items: center; gap: 5px;
 	padding: 5px 12px;
 	font-family: inherit; font-size: 12px; font-weight: 600;
-	color: #fff;
+	color: var(--text-normal);
 	background: var(--nxdb-accent);
 	border: 1px solid var(--nxdb-accent-dim, var(--nxdb-accent));
 	border-radius: 6px;
@@ -162,9 +163,9 @@
 .nxdb-act-btn:hover::before { background: var(--nxdb-accent); }
 .nxdb-act-btn:active { background: var(--nxdb-panel); transform: translateY(1px); }
 .nxdb-act-btn.nxdb-is-active {
-	background: rgba(86, 199, 216, 0.15);
-	border-color: rgba(86, 199, 216, 0.3);
-	color: var(--nxdb-accent);
+	background: var(--background-modifier-active-hover);
+	border-color: var(--interactive-accent);
+	color: var(--interactive-accent);
 }
 
 /* ======== Grid Rows ======== */
@@ -223,13 +224,13 @@
 .nxdb-chn-btn:hover { color: var(--nxdb-accent); border-color: var(--nxdb-border-strong); }
 .nxdb-chn-btn:active { transform: translateY(1px); }
 .nxdb-chn-btn--active {
-	color: var(--nxdb-accent);
-	background: var(--nxdb-accent-soft);
-	border-color: rgba(86, 199, 216, 0.35);
+	color: var(--interactive-accent);
+	background: var(--background-modifier-active-hover);
+	border-color: var(--interactive-accent);
 }
 .nxdb-card__chart { position: relative; margin-top: 2px; }
 .nxdb-linechart__svg { display: block; width: 100%; height: auto; }
-.nxdb-linechart__grid { stroke: rgba(150, 165, 190, 0.08); stroke-width: 1; }
+.nxdb-linechart__grid { stroke: var(--background-modifier-border); stroke-width: 1; }
 .nxdb-linechart__ylabel,
 .nxdb-linechart__xlabel {
 	fill: var(--nxdb-text-faint);
@@ -289,7 +290,7 @@
 .nxdb-barlist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
 .nxdb-barlist li { display: flex; align-items: center; gap: 12px; }
 .nxdb-bar__label { flex-shrink: 0; width: 80px; font-size: 11.5px; color: var(--nxdb-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.nxdb-bar__track { flex: 1; height: 20px; background: rgba(255,255,255,0.03); border-radius: 4px; overflow: hidden; }
+.nxdb-bar__track { flex: 1; height: 20px; background: var(--background-modifier-border); border-radius: 4px; overflow: hidden; }
 .nxdb-bar__fill { height: 100%; border-radius: 4px; transition: width .65s cubic-bezier(.22,.61,.36,1); box-shadow: inset 0 1px 0 rgba(255,255,255,0.15); }
 .nxdb-bar__count { flex-shrink: 0; width: 28px; text-align: right; font-size: 12px; font-weight: 600; color: var(--nxdb-text); }
 
@@ -314,11 +315,11 @@
 	transition: background .12s, color .12s, box-shadow .12s;
 }
 .nxdb-cal__cell--clickable:hover {
-	background: rgba(86, 199, 216, 0.10);
+	background: var(--background-modifier-active-hover);
 	color: var(--nxdb-text);
 }
 .nxdb-cal__cell--clickable:active {
-	background: rgba(86, 199, 216, 0.05);
+	background: var(--background-modifier-active-hover);
 	transform: translateY(1px);
 }
 .nxdb-cal__cell--today {
@@ -373,11 +374,11 @@
 .nxdb-task__title { font-size: 12px; color: var(--nxdb-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .nxdb-task--done .nxdb-task__title { color: var(--nxdb-text-dim); text-decoration: line-through; text-decoration-color: var(--nxdb-text-faint); }
 .nxdb-task__meta { display: flex; align-items: center; gap: 8px; margin-top: 2px; font-size: 10px; color: var(--nxdb-text-faint); }
-.nxdb-tag { padding: 0 5px; border-radius: 2px; font-size: 9px; letter-spacing: .08em; text-transform: uppercase; color: var(--nxdb-text-dim); background: rgba(150,165,190,0.07); border: 1px solid var(--nxdb-border); }
+.nxdb-tag { padding: 0 5px; border-radius: 2px; font-size: 9px; letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); background: var(--background-modifier-border); border: 1px solid var(--background-modifier-border); }
 .nxdb-badge { font-size: 9px; letter-spacing: .1em; padding: 1px 6px; border-radius: 2px; white-space: nowrap; }
-.nxdb-badge--done { color: var(--nxdb-green); background: rgba(111,191,125,0.08); border: 1px solid rgba(111,191,125,0.2); }
-.nxdb-badge--doing { color: var(--nxdb-amber); background: rgba(214,166,72,0.08); border: 1px solid rgba(214,166,72,0.2); }
-.nxdb-badge--todo { color: var(--nxdb-text-dim); background: rgba(150,165,190,0.05); border: 1px solid var(--nxdb-border); }
+.nxdb-badge--done { color: var(--color-green); background: var(--background-modifier-success); border: 1px solid var(--color-green); }
+.nxdb-badge--doing { color: var(--color-yellow); background: color-mix(in srgb, var(--color-yellow) 12%, transparent); border: 1px solid var(--color-yellow); }
+.nxdb-badge--todo { color: var(--text-muted); background: var(--background-modifier-border); border: 1px solid var(--background-modifier-border); }
 
 /* ======== Recent List（最近更新） ======== */
 .nxdb-recentlist li {
@@ -386,7 +387,7 @@
 	cursor: pointer; transition: background .12s;
 }
 .nxdb-recentlist li:last-child { border-bottom: none; }
-.nxdb-recentlist li:hover { background: rgba(150,165,190,0.05); }
+.nxdb-recentlist li:hover { background: var(--background-modifier-hover); }
 .nxdb-recent__main { flex: 1; min-width: 0; }
 .nxdb-recent__title {
 	font-size: 12px; color: var(--nxdb-text);
@@ -437,32 +438,33 @@
 .nxdb-modal .nxdb-modal__item {
 	display: flex;
 	align-items: center;
-	gap: 10px;
+	gap: 12px;
 	width: 100%;
-	padding: 10px 14px;
-	margin-bottom: 4px;
+	min-height: 62px;
+	padding: 14px 16px;
+	margin-bottom: 8px;
 	font-family: var(--mono, inherit);
 	font-size: 13px;
 	color: var(--nxdb-text);
 	background: transparent;
-	border: 1px solid var(--border, rgba(150,165,190,0.1));
+	border: 1px solid var(--background-modifier-border);
 	border-radius: 6px;
 	cursor: pointer;
 	text-align: left;
 	transition: background .12s, border-color .12s;
 }
 .nxdb-modal .nxdb-modal__item:hover {
-	background: var(--background-modifier-hover, rgba(255,255,255,0.05));
-	border-color: var(--interactive-accent, #56c7d8);
+	background: var(--background-modifier-hover);
+	border-color: var(--interactive-accent);
 }
 .nxdb-modal .nxdb-modal__icon {
 	display: flex;
 	align-items: center;
-	color: var(--nxdb-text-dim, #8b919c);
+	color: var(--text-muted);
 }
 .nxdb-modal .nxdb-modal__divider {
 	height: 1px;
-	background: var(--border, rgba(150,165,190,0.1));
+	background: var(--background-modifier-border);
 	margin: 10px 0;
 }
 
@@ -476,25 +478,29 @@
 }
 .nxdb-modal .nxdb-modal__item-title {
 	font-size: 13px;
-	color: var(--nxdb-text, #d8dae0);
+	color: var(--text-normal);
 	font-weight: 500;
 }
 .nxdb-modal .nxdb-modal__item-sub {
-	font-size: 10.5px;
-	color: var(--nxdb-text-dim, #8b919c);
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
+	font-size: 11px;
+	line-height: 1.5;
+	color: var(--text-muted);
+	white-space: normal;
+	overflow: visible;
+	text-overflow: clip;
+	/* 长路径/长文件名（无空格 token）在窄弹窗中也能换行，避免横向溢出截断 */
+	overflow-wrap: anywhere;
+	word-break: break-word;
 }
 .nxdb-modal .nxdb-modal__item--primary {
-	border-color: var(--interactive-accent, rgba(86,199,216,0.4));
-	background: rgba(86, 199, 216, 0.06);
+	border-color: var(--interactive-accent);
+	background: var(--background-modifier-active-hover);
 }
 .nxdb-modal .nxdb-modal__item--primary:hover {
-	background: rgba(86, 199, 216, 0.12);
+	background: var(--background-modifier-active-hover);
 }
 .nxdb-modal .nxdb-modal__item--primary .nxdb-modal__icon {
-	color: var(--nxdb-accent, #56c7d8);
+	color: var(--interactive-accent);
 }
 
 /* ======== Modal 自适应高度（日历「今天的日记」/ 新素材 等弹窗） ======== */
@@ -511,19 +517,7 @@
 	min-height: 0;
 	flex: 1 1 auto;
 }
-/* 多行 item 副文案允许换行（默认 nowrap 会截断长文案），确保文字与内容完整显示 */
-.nxdb-modal .nxdb-modal__item-sub {
-	white-space: normal;
-	overflow: visible;
-	text-overflow: clip;
-}
-/* 新素材弹窗：高度同样自适应（最高 88vh，超出内部滚动）；保留最小高度以容纳三项选项与说明 */
-.nxdb-modal--material {
-	max-height: 88vh;
-	display: flex;
-	flex-direction: column;
-}
-.nxdb-modal--material .modal-content {
-	min-height: 320px;
-	overflow-y: auto;
+/* 所有弹窗选项（含日历弹窗）：统一高度、充足内边距、副文案完整换行（可读性优先） */
+.nxdb-modal .nxdb-modal__item {
+	min-height: 62px;
 }

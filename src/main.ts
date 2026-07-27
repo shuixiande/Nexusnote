@@ -619,14 +619,6 @@ class NexusnoteDashboardView extends ItemView {
 			return;
 		}
 
-		// 打开 Claudian 聊天面板（动态查找其「打开/切换聊天」命令，避免硬编码 id 随版本变化）
-		const openCmd = Object.keys(app.commands.commands).find((id) => {
-			if (!id.startsWith(CLAUDIAN_ID + ':')) return false;
-			const name = app.commands.commands[id]?.name ?? '';
-			return /chat|open|toggle|panel/i.test(name);
-		});
-		if (openCmd) app.commands.executeCommandById(openCmd);
-
 		// 构造处理指令：引用原料层（素材仓库）素材 + 根目录 agent.md 规则
 		const folder = this.materialFolder();
 		const prompt =
@@ -637,12 +629,102 @@ class NexusnoteDashboardView extends ItemView {
 			`· 需对外产出的归入「4_输出（成品出口）」；\n` +
 			`· 原始素材保持在「${folder}」不动，仅新增提炼结果。`;
 
-		try {
-			await navigator.clipboard.writeText(prompt);
-			new Notice('已打开 Claudian 聊天，并将「素材入库」处理指令复制到剪贴板——粘贴到对话框发送，即可按 agent.md 入库素材。');
-		} catch {
-			new Notice('已打开 Claudian 聊天。处理指令：\n' + prompt);
+		// 1) 打开 Claudian 聊天面板（动态查找其「打开/切换聊天」命令，避免硬编码 id 随版本变化）
+		const openCmd = Object.keys(app.commands.commands).find((id) => {
+			if (!id.startsWith(CLAUDIAN_ID + ':')) return false;
+			const name = app.commands.commands[id]?.name ?? '';
+			return /chat|open|toggle|panel/i.test(name);
+		});
+		if (openCmd) app.commands.executeCommandById(openCmd);
+
+		// 2) 等待面板挂载，将指令注入对话框并自动发送；失败则回退剪贴板
+		const sent = await this.injectIntoClaudianChat(prompt);
+		if (sent) {
+			new Notice('已自动将「素材入库」指令填入 Claudian 对话框并发送，正在按 agent.md 处理素材仓库文件。');
+		} else {
+			try {
+				await navigator.clipboard.writeText(prompt);
+				new Notice('未能自动填入 Claudian 对话框，已改为复制到剪贴板——请手动粘贴发送。');
+			} catch {
+				new Notice('请手动将以下指令发送给 Claudian：\n' + prompt);
+			}
 		}
+	}
+
+	/* 将文本注入 Claudian 聊天输入框（兼容 textarea / input / contenteditable），并触发发送 */
+	private async injectIntoClaudianChat(text: string): Promise<boolean> {
+		// 轮询等待聊天面板挂载（obsidian 视图/模态异步渲染）
+		let target: HTMLElement | null = null;
+		for (let i = 0; i < 25; i++) {
+			target = this.findClaudianInput();
+			if (target) break;
+			await new Promise((r) => window.setTimeout(r, 100));
+		}
+		if (!target) return false;
+
+		// 写入文本：textarea/input 用原生 setter + input 事件（兼容 React/Vue 受控组件）；contenteditable 直接写内容
+		if (target instanceof HTMLTextAreaElement || target instanceof HTMLInputElement) {
+			const proto = target instanceof HTMLTextAreaElement
+				? HTMLTextAreaElement.prototype
+				: HTMLInputElement.prototype;
+			// eslint-disable-next-line @typescript-eslint/unbound-method -- 需调用原生 value setter 以兼容受控组件
+			const setter = Object.getOwnPropertyDescriptor(proto, 'value')?.set;
+			setter?.call(target, text);
+			target.dispatchEvent(new Event('input', { bubbles: true }));
+			target.dispatchEvent(new Event('change', { bubbles: true }));
+		} else {
+			target.focus();
+			target.textContent = text;
+			target.dispatchEvent(new Event('input', { bubbles: true }));
+		}
+
+		await new Promise((r) => window.setTimeout(r, 80));
+
+		// 触发发送：优先点击「发送」语义按钮，否则回退 Enter 键
+		const container = target.closest('.view-content, .modal, .workspace-leaf, form') ?? target.parentElement;
+		const all = container?.querySelectorAll<HTMLButtonElement>('button');
+		const buttons: HTMLButtonElement[] = all ? Array.from(all) : [];
+		const send = buttons.find((b) => {
+			const ctx = (
+				(b.getAttribute('aria-label') ?? '') + ' ' +
+				(b.className ?? '') + ' ' +
+				(b.textContent ?? '') + ' ' +
+				(b.innerHTML ?? '')
+			).toLowerCase();
+			return /send|发送|submit|paper[- ]?plane|arrow-up|arrow-right|telegram/i.test(ctx);
+		});
+		if (send) {
+			send.click();
+			return true;
+		}
+		target.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', code: 'Enter', bubbles: true, cancelable: true }));
+		target.dispatchEvent(new KeyboardEvent('keypress', { key: 'Enter', code: 'Enter', bubbles: true, cancelable: true }));
+		return true;
+	}
+
+	/* 在已挂载的 Claudian 视图/模态中定位聊天输入框 */
+	private findClaudianInput(): HTMLElement | null {
+		const roots = Array.from(
+			document.querySelectorAll<HTMLElement>('.workspace-leaf, .modal, .view-content'),
+		);
+		for (const root of roots) {
+			const ta = root.querySelector<HTMLTextAreaElement>('textarea');
+			if (ta && this.isVisible(ta)) return ta;
+			const inp = root.querySelector<HTMLInputElement>('input[type="text"], input:not([type]), input[type="search"]');
+			if (inp && this.isVisible(inp)) return inp;
+			const ed = root.querySelector<HTMLElement>('[contenteditable="true"], [contenteditable=""]');
+			if (ed && this.isVisible(ed)) return ed;
+		}
+		return null;
+	}
+
+	private isVisible(el: HTMLElement): boolean {
+		const style = getComputedStyle(el);
+		return (
+			style.display !== 'none' &&
+			style.visibility !== 'hidden' &&
+			(el.offsetWidth > 0 || el.offsetHeight > 0)
+		);
 	}
 
 	private async doVaultLint(): Promise<void> {
