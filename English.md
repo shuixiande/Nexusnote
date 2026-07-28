@@ -1,5 +1,9 @@
 # Nexusnote
 
+<div align="center">
+  <img src="assets/logo.svg" width="128" alt="Nexusnote">
+</div>
+
 >【English】 【[中文](README)】
 
 An Obsidian dashboard plugin for your personal knowledge base — an in-app **Agent Operation Center**. It gives you a one-stop overview and quick-action hub to manage your notes using a four-layer knowledge base structure.
@@ -126,6 +130,21 @@ If this plugin helps with your knowledge management, feel free to buy me a coffe
 | ![WeChat QR](assets/wechat-pay.jpg) | ![Alipay QR](assets/alipay-pay.jpg) |
 
 > Scan the QR codes above to buy me a coffee ☕ via WeChat Pay or Alipay.
+
+## License
+
+This project is licensed under the **Creative Commons Attribution-NonCommercial
+4.0 International (CC BY-NC 4.0)** license.
+
+- **You may**: freely view, copy, share, and modify the source code for
+  **personal, non-commercial** use.
+- **You must**: retain original attribution and indicate if you modified it.
+- **You may NOT**: use this project for any **commercial purpose** (including
+  but not limited to selling, paid distribution, or embedding in a commercial
+  product).
+
+The full terms are in the [`LICENSE`](LICENSE) file at the repository root.
+For commercial licensing, please contact the author separately.
 
 ## API documentation
 

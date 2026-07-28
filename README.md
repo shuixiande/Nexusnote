@@ -1,5 +1,9 @@
 # Nexusnote
 
+<div align="center">
+  <img src="assets/logo.svg" width="128" alt="Nexusnote">
+</div>
+
 > 【中文】【[English](English.md)】
 
 Obsidian 个人知识库仪表盘插件（Agent 操作中心）。在 Obsidian 内部提供一站式知识库概览与快速操作入口，帮助你以「四层知识库」结构管理个人资料。
@@ -126,6 +130,16 @@ npm run build
 | ![微信收款码](assets/wechat-pay.jpg) | ![支付宝收款码](assets/alipay-pay.jpg) |
 
 > 扫描上方二维码即可通过微信或支付宝请我喝杯咖啡 ☕。
+
+## 许可证
+
+本项目采用 **Creative Commons Attribution-NonCommercial 4.0 International（CC BY-NC 4.0）** 许可证。
+
+- **你可以**：免费查看、复制、分享、修改本插件源码，用于**个人非商业**用途。
+- **你必须**：保留原作者署名，并标注是否做了修改。
+- **你不能**：将本项目用于任何**商业目的**（包括但不限于售卖、付费分发、嵌入商业产品）。
+
+完整条款见仓库根目录的 [`LICENSE`](LICENSE) 文件。如需商业授权，请单独联系作者。
 
 ## API 文档
 

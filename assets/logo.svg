@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="Nexusnote logo">
+  <defs>
+    <linearGradient id="nxBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7C5CFC"/>
+      <stop offset="1" stop-color="#1FC8D6"/>
+    </linearGradient>
+    <linearGradient id="nxNote" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7C5CFC"/>
+      <stop offset="1" stop-color="#1FC8D6"/>
+    </linearGradient>
+    <radialGradient id="nxGlow" cx="0.5" cy="0.42" r="0.55">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect x="8" y="8" width="240" height="240" rx="54" fill="url(#nxBg)"/>
+  <rect x="8" y="8" width="240" height="240" rx="54" fill="url(#nxGlow)"/>
+  <g stroke="#ffffff" stroke-opacity="0.82" stroke-width="6" stroke-linecap="round">
+    <line x1="107" y1="107" x2="66" y2="66"/>
+    <line x1="149" y1="107" x2="190" y2="66"/>
+    <line x1="107" y1="149" x2="66" y2="190"/>
+    <line x1="149" y1="149" x2="190" y2="190"/>
+  </g>
+  <g fill="#ffffff">
+    <circle cx="63" cy="63" r="13"/>
+    <circle cx="193" cy="63" r="13"/>
+    <circle cx="63" cy="193" r="13"/>
+    <circle cx="193" cy="193" r="13"/>
+  </g>
+  <rect x="100" y="100" width="56" height="56" rx="14" fill="#ffffff"/>
+  <g stroke="url(#nxNote)" stroke-width="5.5" stroke-linecap="round">
+    <line x1="112" y1="117" x2="148" y2="117"/>
+    <line x1="112" y1="129" x2="148" y2="129"/>
+    <line x1="112" y1="141" x2="138" y2="141"/>
+  </g>
+</svg>

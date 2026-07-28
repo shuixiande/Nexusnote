@@ -4,6 +4,6 @@
 	"version": "0.1.1",
 	"minAppVersion": "1.8.0",
 	"description": "A dashboard for tracking AI agent workflows, sessions, and outputs inside Obsidian.",
-	"author": "Jason",
+	"author": "AIteSn",
 	"isDesktopOnly": true
 }

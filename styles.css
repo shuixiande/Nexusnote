@@ -144,8 +144,8 @@
 }
 .nxdb-act-btn {
 	display: inline-flex; align-items: center; gap: 7px;
-	padding: 6px 12px;
-	font-family: inherit; font-size: 12px;
+	padding: 8px 14px;
+	font-family: inherit; font-size: 15px; font-weight: 700;
 	color: var(--nxdb-text);
 	background: var(--nxdb-panel);
 	border: 1px solid var(--nxdb-border);
@@ -198,6 +198,11 @@
 .nxdb-stat__delta { font-size: 10px; color: var(--nxdb-text-dim); }
 .nxdb-stat__delta--up { color: var(--nxdb-green); }
 .nxdb-stat__delta--down { color: var(--nxdb-red); }
+.nxdb-stat .nxdb-stat__label {
+	font-size: 15px; font-weight: 700; color: var(--nxdb-text); letter-spacing: normal;
+}
+.nxdb-stat .nxdb-stat__value { font-size: 26px; font-weight: 700; }
+.nxdb-stat .nxdb-stat__delta { font-size: 12px; font-weight: 700; }
 .nxdb-stat__strip {
 	position: absolute; left: 0; bottom: 0; height: 2px; width: 100%;
 	background: linear-gradient(90deg, transparent 0%, var(--nxdb-accent-dim) 40%, var(--nxdb-accent) 80%, transparent 100%);

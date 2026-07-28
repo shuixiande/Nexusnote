@@ -1,4 +1,4 @@
-import { App, ItemView, Modal, Notice, Plugin, TFile, WorkspaceLeaf, setIcon } from 'obsidian';
+import { App, ItemView, Modal, Notice, Plugin, TFile, WorkspaceLeaf, setIcon, addIcon } from 'obsidian';
 import { NexusnoteSettings, NexusnoteSettingTab, DEFAULT_SETTINGS } from './settings';
 import {
 	getVaultStats, getKbLayerCounts, getTaskStats,
@@ -9,6 +9,23 @@ import type { CategoryCount, SeriesPoint, NoteRef, ParsedTask, RecentNote, KbLay
 
 const VIEW_TYPE = 'nexusnote-dashboard';
 const MONTHS = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+
+/**
+ * Nexusnote 专属 ribbon 图标（单色描边，lucide 同款风格，使用 currentColor 跟随主题）。
+ * 意象：一张笔记卡片连接几个发散的想法节点 —— 既点出 Note，又体现 Nexus（知识网络枢纽），
+ * 与官方插件自带的 layout-dashboard 等图标明显区分。
+ */
+const NEXUSNOTE_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">` +
+	`<rect x="5.5" y="6.5" width="11" height="9.5" rx="2"/>` +
+	`<line x1="8" y1="9.5" x2="14" y2="9.5"/>` +
+	`<line x1="8" y1="12.5" x2="12.5" y2="12.5"/>` +
+	`<circle cx="18.5" cy="4" r="1.6"/>` +
+	`<circle cx="3.5" cy="18" r="1.6"/>` +
+	`<circle cx="19" cy="18.2" r="1.6"/>` +
+	`<path d="M15.5 8.5 L17.4 5.2"/>` +
+	`<path d="M7.5 15 L5 17"/>` +
+	`<path d="M16 15.2 L17.9 17"/>` +
+	`</svg>`;
 
 /** 补零工具函数 */
 function pad(n: number): string { return String(n).padStart(2, '0'); }
@@ -1350,7 +1367,10 @@ export default class NexusnotePlugin extends Plugin {
 
 		this.registerView(VIEW_TYPE, (leaf) => new NexusnoteDashboardView(leaf, this));
 
-		this.addRibbonIcon('layout-dashboard', '打开仪表盘', () => {
+		// 注册专属 ribbon 图标，避免和官方插件的 layout-dashboard 撞脸
+		addIcon('nexusnote', NEXUSNOTE_ICON);
+
+		this.addRibbonIcon('nexusnote', '打开仪表盘', () => {
 			void this.activateView();
 		});
 
