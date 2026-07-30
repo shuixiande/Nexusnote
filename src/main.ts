@@ -1,4 +1,4 @@
-import { App, ItemView, Modal, Notice, Plugin, TFile, WorkspaceLeaf, setIcon, addIcon } from 'obsidian';
+import { App, ItemView, Modal, Notice, Plugin, TFile, WorkspaceLeaf, setIcon, addIcon, requestUrl } from 'obsidian';
 import { NexusnoteSettings, NexusnoteSettingTab, DEFAULT_SETTINGS } from './settings';
 import {
 	getVaultStats, getKbLayerCounts, getTaskStats,
@@ -9,6 +9,13 @@ import type { CategoryCount, SeriesPoint, NoteRef, ParsedTask, RecentNote, KbLay
 
 const VIEW_TYPE = 'nexusnote-dashboard';
 const MONTHS = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+
+/** 自动更新：GitHub 仓库与 Release 地址 */
+const GITHUB_REPO = 'shuixiande/Nexusnote';
+const RELEASE_API_LATEST = `https://api.github.com/repos/${GITHUB_REPO}/releases/latest`;
+const RELEASE_DL_BASE = `https://github.com/${GITHUB_REPO}/releases/download`;
+/** 自动更新要覆盖的三个核心文件 */
+const UPDATE_FILES = ['main.js', 'manifest.json', 'styles.css'];
 
 /**
  * Nexusnote 专属 ribbon 图标（单色描边，lucide 同款风格，使用 currentColor 跟随主题）。
@@ -29,6 +36,23 @@ const NEXUSNOTE_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColo
 
 /** 补零工具函数 */
 function pad(n: number): string { return String(n).padStart(2, '0'); }
+
+/** 版本号比较：latest 是否比 current 新（按点分数字逐段比较） */
+function parseVersion(v: string): number[] {
+	return v.replace(/^v/i, '').split('.').map((n) => parseInt(n, 10) || 0);
+}
+function isNewerVersion(latest: string, current: string): boolean {
+	const a = parseVersion(latest);
+	const b = parseVersion(current);
+	const len = Math.max(a.length, b.length);
+	for (let i = 0; i < len; i++) {
+		const x = a[i] || 0;
+		const y = b[i] || 0;
+		if (x > y) return true;
+		if (x < y) return false;
+	}
+	return false;
+}
 
 /** 把数值向上取整到"好看"的刻度（1 / 2 / 5 × 10^n） */
 function niceCeil(v: number): number {
@@ -1380,7 +1404,18 @@ export default class NexusnotePlugin extends Plugin {
 			callback: () => void this.activateView(),
 		});
 
+		this.addCommand({
+			id: 'check-update',
+			name: '检查更新',
+			callback: () => void this.checkForUpdate(false),
+		});
+
 		this.addSettingTab(new NexusnoteSettingTab(this.app, this));
+
+		// 启动后自动检查一次更新（可在设置中关闭）
+		if (this.settings.autoCheckUpdate) {
+			window.setTimeout(() => void this.checkForUpdate(true), 4000);
+		}
 
 		// 监听文件变化，500ms debounce 后自动刷新 Dashboard
 		const scheduleRefresh = () => {
@@ -1417,6 +1452,74 @@ export default class NexusnotePlugin extends Plugin {
 
 	async saveSettings(): Promise<void> {
 		await this.saveData(this.settings);
+	}
+
+	/**
+	 * 检查 GitHub 最新 Release 是否有新版本。
+	 * @param silent 为 true 时（启动自动检查）仅在「有更新」时提示，无更新不弹窗；
+	 *              为 false 时（手动命令）无论有无更新都给用户明确反馈。
+	 */
+	async checkForUpdate(silent = false): Promise<void> {
+		try {
+			const resp = await requestUrl({
+				url: RELEASE_API_LATEST,
+				headers: { Accept: 'application/vnd.github+json' },
+			});
+			if (resp.status !== 200) {
+				if (!silent) new Notice(`检查更新失败：GitHub 返回 ${resp.status}`);
+				return;
+			}
+			const data = resp.json as { tag_name?: string; body?: string; html_url?: string };
+			const latest = data.tag_name ?? '';
+			if (!latest) {
+				if (!silent) new Notice('检查更新失败：未获取到版本信息');
+				return;
+			}
+			const current = this.manifest?.version ?? '0.0.0';
+			if (!isNewerVersion(latest, current)) {
+				if (!silent) new Notice(`已是最新版本（v${current}）`);
+				return;
+			}
+			new UpdateModal(this.app, this, latest, data.body ?? '', data.html_url ?? '').open();
+		} catch (e) {
+			console.error('[Nexusnote] 检查更新失败', e);
+			if (!silent) new Notice('检查更新失败：' + (e instanceof Error ? e.message : String(e)));
+		}
+	}
+
+	/**
+	 * 下载并安装指定 tag 的三个核心文件，然后重启插件使新代码生效。
+	 * 先全部下载到内存，全部成功后再写入磁盘，避免半途写入导致插件损坏。
+	 */
+	async installUpdate(tag: string): Promise<void> {
+		const base = `${this.app.vault.configDir}/plugins/Nexusnote`;
+		try {
+			const buffers: Array<{ name: string; data: ArrayBuffer }> = [];
+			for (const file of UPDATE_FILES) {
+				const url = `${RELEASE_DL_BASE}/${tag}/${file}`;
+				const r = await requestUrl({ url });
+				if (r.status !== 200) throw new Error(`${file} 下载失败（HTTP ${r.status}）`);
+				buffers.push({ name: file, data: r.arrayBuffer });
+			}
+			for (const b of buffers) {
+				await this.app.vault.adapter.writeBinary(`${base}/${b.name}`, b.data);
+			}
+			new Notice('已更新文件，正在重启插件…');
+			// 先禁用再启用，加载新的 main.js
+			const plugins = (this.app as App & {
+				plugins: {
+					disablePlugin: (id: string) => Promise<void>;
+					enablePlugin: (id: string) => Promise<void>;
+				};
+			}).plugins;
+			await plugins.disablePlugin('Nexusnote');
+			window.setTimeout(() => {
+				void plugins.enablePlugin('Nexusnote');
+			}, 400);
+		} catch (e) {
+			console.error('[Nexusnote] 更新失败', e);
+			new Notice('更新失败：' + (e instanceof Error ? e.message : String(e)));
+		}
 	}
 
 	private async activateView(): Promise<void> {
@@ -1743,6 +1846,72 @@ class DayNotesModal extends Modal {
 		diaryBtn.addEventListener('click', () => {
 			this.close();
 			void this.view.createDiaryForDate(this.dateStr);
+		});
+	}
+
+	onClose(): void {
+		this.contentEl.empty();
+	}
+}
+
+
+/* ============================================================
+   Update Modal — 自动检查到新版本时弹出，展示变更并确认安装
+   ============================================================ */
+class UpdateModal extends Modal {
+	private plugin: NexusnotePlugin;
+	private tag: string;
+	private changelog: string;
+	private url: string;
+
+	constructor(app: App, plugin: NexusnotePlugin, tag: string, changelog: string, url: string) {
+		super(app);
+		this.plugin = plugin;
+		this.tag = tag;
+		this.changelog = changelog;
+		this.url = url;
+	}
+
+	onOpen(): void {
+		const { contentEl, modalEl } = this;
+		modalEl.addClass('nxdb-modal');
+		contentEl.empty();
+
+		contentEl.createEl('h2', {
+			text: `发现新版本 ${this.tag}`,
+			cls: 'nxdb-modal__title',
+		});
+		contentEl.createEl('p', {
+			text: `当前版本 v${this.plugin.manifest.version}，可更新到 ${this.tag}。`,
+			cls: 'nxdb-modal__desc',
+		});
+
+		const log = contentEl.createEl('pre', { cls: 'nxdb-update__log' });
+		log.textContent = this.changelog.trim() || '（无更新说明）';
+
+		if (this.url) {
+			const link = contentEl.createEl('a', {
+				text: '在 GitHub 查看此版本 →',
+				href: this.url,
+				cls: 'nxdb-update__link',
+			});
+			link.setAttr('target', '_blank');
+		}
+
+		const actions = contentEl.createDiv({ cls: 'nxdb-modal__actions' });
+		const later = actions.createEl('button', {
+			cls: 'nxdb-modal__btn nxdb-modal__btn--ghost',
+			text: '稍后',
+		});
+		later.addEventListener('click', () => this.close());
+
+		const update = actions.createEl('button', {
+			cls: 'nxdb-modal__btn nxdb-modal__btn--primary',
+			text: '更新并重启',
+		});
+		update.addEventListener('click', () => {
+			this.close();
+			void this.plugin.installUpdate(this.tag);
 		});
 	}
 

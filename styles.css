@@ -526,3 +526,60 @@
 .nxdb-modal .nxdb-modal__item {
 	min-height: 62px;
 }
+
+/* 更新弹窗：变更说明 + 操作按钮 */
+.nxdb-modal .nxdb-update__log {
+	margin: 12px 0 4px;
+	padding: 12px 14px;
+	max-height: 240px;
+	overflow: auto;
+	background: var(--background-primary-alt, var(--background-secondary));
+	border: 1px solid var(--nxdb-border);
+	border-radius: 6px;
+	color: var(--text-muted);
+	font-size: 13px;
+	line-height: 1.6;
+	white-space: pre-wrap;
+	word-break: break-word;
+	font-family: var(--font-monospace);
+}
+.nxdb-modal .nxdb-update__link {
+	display: inline-block;
+	margin-bottom: 8px;
+	color: var(--interactive-accent);
+	font-size: 13px;
+	text-decoration: none;
+}
+.nxdb-modal .nxdb-update__link:hover {
+	text-decoration: underline;
+}
+.nxdb-modal .nxdb-modal__actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+	margin-top: 16px;
+}
+.nxdb-modal .nxdb-modal__btn {
+	padding: 8px 18px;
+	font-size: 14px;
+	font-weight: 600;
+	border-radius: 6px;
+	border: 1px solid transparent;
+	cursor: pointer;
+	font-family: inherit;
+}
+.nxdb-modal .nxdb-modal__btn--primary {
+	background: var(--interactive-accent);
+	color: var(--text-on-accent, #fff);
+}
+.nxdb-modal .nxdb-modal__btn--primary:hover {
+	background: var(--interactive-accent-hover, var(--interactive-accent));
+}
+.nxdb-modal .nxdb-modal__btn--ghost {
+	background: transparent;
+	color: var(--text-muted);
+	border-color: var(--nxdb-border);
+}
+.nxdb-modal .nxdb-modal__btn--ghost:hover {
+	background: var(--background-modifier-hover);
+}

@@ -16,6 +16,8 @@ export interface NexusnoteSettings {
 	templaterFolder: string;
 	/** 仓库体检报告存放文件夹 */
 	reportFolder: string;
+	/** 启动时是否自动检查更新 */
+	autoCheckUpdate: boolean;
 }
 
 export const DEFAULT_SETTINGS: NexusnoteSettings = {
@@ -26,6 +28,7 @@ export const DEFAULT_SETTINGS: NexusnoteSettings = {
 	inspireFolder: '2_创意想法（灵感燃料）',
 	templaterFolder: 'templater',
 	reportFolder: 'Reports',
+	autoCheckUpdate: true,
 };
 
 export class NexusnoteSettingTab extends PluginSettingTab {
@@ -131,6 +134,19 @@ export class NexusnoteSettingTab extends PluginSettingTab {
 					.setValue(this.plugin.settings.reportFolder)
 					.onChange(async (value) => {
 						this.plugin.settings.reportFolder = value;
+						await this.plugin.saveSettings();
+					}),
+			);
+
+		new Setting(containerEl).setName('更新').setHeading();
+
+		new Setting(containerEl)
+			.setName('自动检查更新')
+			.setDesc('Obsidian 启动时自动比对 GitHub 最新 Release，发现新版本弹窗提示（不会静默替换文件）')
+			.addToggle((t) =>
+				t.setValue(this.plugin.settings.autoCheckUpdate)
+					.onChange(async (v) => {
+						this.plugin.settings.autoCheckUpdate = v;
 						await this.plugin.saveSettings();
 					}),
 			);
