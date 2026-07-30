@@ -1,4 +1,5 @@
 import { App, ItemView, Modal, Notice, Plugin, TFile, WorkspaceLeaf, setIcon, addIcon, requestUrl } from 'obsidian';
+import { KNOWLEDGE_SYSTEM_DOC } from './knowledgeSystemDoc';
 import { NexusnoteSettings, NexusnoteSettingTab, DEFAULT_SETTINGS } from './settings';
 import {
 	getVaultStats, getKbLayerCounts, getTaskStats,
@@ -226,60 +227,11 @@ sources: []
 	},
 ];
 
-/** 生成根目录 agent.md（AI 助手规则文件），日期用当前日期填充 */
+/** 生成根目录 agent.md（AI 助手规则文件），内容为《个人知识库系统-升级版.md》全文 */
 function buildAgentMd(): string {
-	const today = new Date();
-	const d = `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}`;
-	return `# 个人知识库系统 · Agent 规则
-
-> 本文件由 Nexusnote 一键部署自动生成（${d}）。定义 AI 助手在本知识库中的行为规范，所有操作均遵循以下四层架构与核心流程。
-
-## 一、四层架构
-
-- \`1_原始资料（不可变原料）/\`：固定、高质量、科学的资料。只存不删，AI 只读取不修改。
-- \`2_创意想法（灵感燃料）/\`：稀奇古怪的想法、灵感、半成形计划。想到就记，不评判。
-- \`3_知识库（AI接管Wiki）/\`：由 AI 维护的结构化知识页面（概念 / 工具 / 创意 / 笔记页），页面间相互链接形成知识图谱。
-- \`4_输出（成品出口）/\`：AI 创作的最终结果，可直接分享，无需纳入知识图谱。
-
-## 二、核心操作
-
-1. **Ingest（摄入）**：素材放入 \`1_原始资料\` → 提取关键信息 → 更新 \`3_知识库\` → 自动 git 提交并推送。
-2. **Idea Capture（捕捉创意）**：记录想法到 \`2_创意想法\`；定期回顾，有价值的升级到知识库。
-3. **Query & Create（查询与创作）**：普通查询读知识库回答；结合创意与知识库创作文案，直接展示给用户（满意的自行保存到 \`4_输出\`）。
-4. **Archive（归档）**：存回知识库前，**必须先征求用户同意**。
-5. **Lint（巡检）**：每周六 9:00 自动执行；检查一致性 / 完整性 / 时效性 / 结构，生成巡检报告。
-
-## 三、页面规范（3_知识库）
-
-每个页面顶部 frontmatter：
-
-\`\`\`yaml
----
-title: 页面标题
-created: YYYY-MM-DD
-updated: YYYY-MM-DD
-tags: [标签1, 标签2]
-sources: [指向 1_原始资料 的链接]
----
-\`\`\`
-
-命名约定：概念页 \`概念_xxx.md\`、工具页 \`工具_xxx.md\`、创意页 \`创意_xxx.md\`、笔记页 \`笔记_xxx.md\`。
-
-## 四、操作日志
-
-- 位置：\`3_知识库（AI接管Wiki）/操作日志.md\`
-- 格式：以 \`## YYYY-MM-DD\` 为日分组，操作以 \`### [操作类型] 标题\` 记录（时间 / 触发 / 涉及文件 / 摘要 / 结果 / 备注）。
-- Ingest、Lint 完成后自动追加；Query & Create 仅记录主题与概要。
-
-## 五、其他要求
-
-- 听到"摄入新资料"→ 读 \`1_原始资料\` 新文件并更新知识库。
-- 听到"记录想法 / 捕捉创意"→ 写入 \`2_创意想法\`。
-- 听到"帮我写关于 xxx 的文案"→ 结合 \`2_创意想法\` 与 \`3_知识库\` 创作并直接输出。
-- 听到"巡检 / 健康检查"→ 立即执行一次 Lint。
-- 每周六 9:00 自动 Lint；每次 ingest 后自动 git 提交并推送。
-`;
+	return KNOWLEDGE_SYSTEM_DOC;
 }
+
 
 /* ---------- 类型别名：避免 TSX 中 `as` 断言的 `>` 解析歧义 ---------- */
 type InternalPluginsLike = {
@@ -824,10 +776,14 @@ class NexusnoteDashboardView extends ItemView {
 			const templater = this.templaterFolder();
 			await this.ensureFolder(templater);
 
-			// 根目录规则文件 agent.md（已存在则保留，不覆盖）
+			// 根目录规则文件 agent.md：写入《个人知识库系统-升级版.md》全文（已存在则覆盖为最新全文）
 			const agentPath = 'agent.md';
-			if (!this.app.vault.getAbstractFileByPath(agentPath)) {
-				await this.app.vault.create(agentPath, buildAgentMd());
+			const agentContent = buildAgentMd();
+			const existingAgent = this.app.vault.getAbstractFileByPath(agentPath);
+			if (existingAgent instanceof TFile) {
+				await this.app.vault.modify(existingAgent, agentContent);
+			} else {
+				await this.app.vault.create(agentPath, agentContent);
 			}
 
 			// 模板（缺失才生成，不覆盖用户自定义）
@@ -841,7 +797,7 @@ class NexusnoteDashboardView extends ItemView {
 			s.templaterFolder = templater;
 			await this.plugin.saveSettings();
 
-			new Notice('知识库已部署：四层目录 + agent.md + 模板已就绪');
+			new Notice('知识库已部署：四层目录 + agent.md（知识库系统全文）+ 模板已就绪');
 			void this.reloadDashboard();
 		} catch (e) {
 			new Notice(`部署失败：${String(e)}`);
