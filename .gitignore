@@ -42,6 +42,9 @@ Nexusnote插件.md
 # excluded from this repo until the publishing token has that scope.
 .github/workflows/
 
+# 软著申报材料（md/docx/html/cjs/py 等，非插件源码，不发布）
+软著申报/
+
 # Raw payment QR images live in the vault root; the published copies are in assets/
 微信收款码.jpg
 支付宝收款码.jpg
