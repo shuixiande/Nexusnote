@@ -16,6 +16,9 @@ export default defineConfig(
 		'.workbuddy',
 		'prototype',
 		'.obsidian',
+		'软著申报',
+		'docs',
+		'assets',
 	]),
 	{
 		languageOptions: {

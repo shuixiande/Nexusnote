@@ -334,6 +334,15 @@ class NexusnoteDashboardView extends ItemView {
 			text: s.dashboardTitle || '我的知识库仪表盘',
 		});
 
+		// 副标题：知识库是给AI用的（链接到公众号文章）
+		const subtitle = brand.createEl('p', { cls: 'nxdb-brand__subtitle' });
+		subtitle.createEl('a', {
+			text: '知识库是给AI用的',
+			href: 'https://mp.weixin.qq.com/s/IIDDQFG9xszJQE_31WbY6A',
+			cls: 'nxdb-brand__link',
+			attr: { target: '_blank', rel: 'noopener noreferrer' },
+		});
+
 		const meta = h.createDiv('nxdb-header__meta');
 		const liveChip = meta.createEl('button', { cls: 'nxdb-status-chip nxdb-status-chip--live', text: '在线' });
 		liveChip.createSpan('nxdb-status-chip__pulse');

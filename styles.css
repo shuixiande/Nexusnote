@@ -74,6 +74,22 @@
 	letter-spacing: .01em;
 	color: var(--nxdb-text);
 }
+.nxdb-brand__subtitle {
+	margin: 4px 0 0;
+	font-size: 13px;
+	font-weight: 500;
+	color: var(--nxdb-text-faint);
+}
+.nxdb-brand__link {
+	color: var(--nxdb-accent);
+	font-weight: 600;
+	text-decoration: none;
+	border-bottom: 1px solid transparent;
+	transition: border-color .15s ease;
+}
+.nxdb-brand__link:hover {
+	border-bottom-color: var(--nxdb-accent);
+}
 .nxdb-header__meta { display: flex; align-items: center; gap: 14px; }
 .nxdb-status-chip {
 	display: inline-flex;
