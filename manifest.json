@@ -1,9 +1,10 @@
 {
 	"id": "Nexusnote",
 	"name": "Nexusnote",
-	"version": "0.1.5",
+	"version": "0.1.6",
 	"minAppVersion": "1.8.0",
 	"description": "A dashboard for tracking AI agent workflows, sessions, and outputs inside Obsidian.",
 	"author": "AIteSn",
+	"authorUrl": "https://github.com/shuixiande",
 	"isDesktopOnly": true
 }

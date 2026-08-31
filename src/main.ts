@@ -11,12 +11,9 @@ import type { CategoryCount, SeriesPoint, NoteRef, ParsedTask, RecentNote, KbLay
 const VIEW_TYPE = 'nexusnote-dashboard';
 const MONTHS = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
 
-/** 自动更新：GitHub 仓库与 Release 地址 */
+/** 更新检查：GitHub 仓库与 Release 地址（仅用于检查新版本并提示，不下载覆盖） */
 const GITHUB_REPO = 'shuixiande/Nexusnote';
 const RELEASE_API_LATEST = `https://api.github.com/repos/${GITHUB_REPO}/releases/latest`;
-const RELEASE_DL_BASE = `https://github.com/${GITHUB_REPO}/releases/download`;
-/** 自动更新要覆盖的三个核心文件 */
-const UPDATE_FILES = ['main.js', 'manifest.json', 'styles.css'];
 
 /**
  * Nexusnote 专属 ribbon 图标（单色描边，lucide 同款风格，使用 currentColor 跟随主题）。
@@ -1453,38 +1450,18 @@ export default class NexusnotePlugin extends Plugin {
 	}
 
 	/**
-	 * 下载并安装指定 tag 的三个核心文件，然后重启插件使新代码生效。
-	 * 先全部下载到内存，全部成功后再写入磁盘，避免半途写入导致插件损坏。
+	 * 在默认浏览器打开指定版本的 GitHub Release 页面，由用户或 Obsidian 官方
+	 * 更新机制完成升级。插件本身不下载/覆盖 main.js，以符合社区插件审核要求。
 	 */
-	async installUpdate(tag: string): Promise<void> {
-		const base = `${this.app.vault.configDir}/plugins/Nexusnote`;
-		try {
-			const buffers: Array<{ name: string; data: ArrayBuffer }> = [];
-			for (const file of UPDATE_FILES) {
-				const url = `${RELEASE_DL_BASE}/${tag}/${file}`;
-				const r = await requestUrl({ url });
-				if (r.status !== 200) throw new Error(`${file} 下载失败（HTTP ${r.status}）`);
-				buffers.push({ name: file, data: r.arrayBuffer });
-			}
-			for (const b of buffers) {
-				await this.app.vault.adapter.writeBinary(`${base}/${b.name}`, b.data);
-			}
-			new Notice('已更新文件，正在重启插件…');
-			// 先禁用再启用，加载新的 main.js
-			const plugins = (this.app as App & {
-				plugins: {
-					disablePlugin: (id: string) => Promise<void>;
-					enablePlugin: (id: string) => Promise<void>;
-				};
-			}).plugins;
-			await plugins.disablePlugin('Nexusnote');
-			window.setTimeout(() => {
-				void plugins.enablePlugin('Nexusnote');
-			}, 400);
-		} catch (e) {
-			console.error('[Nexusnote] 更新失败', e);
-			new Notice('更新失败：' + (e instanceof Error ? e.message : String(e)));
-		}
+	openRelease(url: string): void {
+		if (!url) return;
+		const a = document.createElement('a');
+		a.href = url;
+		a.target = '_blank';
+		a.rel = 'noopener noreferrer';
+		document.body.appendChild(a);
+		a.click();
+		a.remove();
 	}
 
 	private async activateView(): Promise<void> {
@@ -1870,14 +1847,14 @@ class UpdateModal extends Modal {
 		});
 		later.addEventListener('click', () => this.close());
 
-		const update = actions.createEl('button', {
+		const update = actions.createEl('a', {
 			cls: 'nxdb-modal__btn nxdb-modal__btn--primary',
-			text: '更新并重启',
+			text: '前往 GitHub 更新',
+			href: this.url,
 		});
-		update.addEventListener('click', () => {
-			this.close();
-			void this.plugin.installUpdate(this.tag);
-		});
+		update.setAttr('target', '_blank');
+		update.setAttr('rel', 'noopener noreferrer');
+		update.addEventListener('click', () => this.close());
 	}
 
 	onClose(): void {
