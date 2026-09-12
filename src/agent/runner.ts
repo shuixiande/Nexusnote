@@ -1,16 +1,16 @@
 /* ============================================================
    Nexusnote — Agent 任务运行器
-   通过 child_process.spawn 调用本地 CLI 工具
+   通过子进程调用本地 CLI 工具
    （Claude Code / Codex CLI / 自定义脚本等）
    必须经用户确认后才可执行
 
-   ⚠️ 使用 Node.js API（child_process / path），移动端不可用。
+   ⚠️ 依赖 Node.js 子进程能力，移动端不可用。
    已在 manifest.json 设置 isDesktopOnly: true。
-   若未来需要支持移动端，需改为 Obsidian 公开 API 或条件加载。
+   为降低对外部类型定义（@types/node）的依赖，本文件对所用到的
+   Node 接口做了最小、显式的本地类型声明。
    ============================================================ */
 
-import { spawn, type ChildProcess } from 'child_process';
-import path from 'path';
+import { spawn } from 'child_process';
 
 export interface AgentTask {
 	id: string;
@@ -60,39 +60,69 @@ export const PREDEFINED_TASKS: Record<string, AgentTask> = {
 	},
 };
 
+/* ---- 本地最小类型：仅覆盖本文件用到的 Node 子进程接口 ----
+   这样即使类型环境中缺少 @types/node，也不会退化为 any。 */
+
+/** 子进程可读流：只用到 data 事件 */
+interface NodeReadableLike {
+	on(event: 'data', listener: (chunk: Uint8Array) => void): unknown;
+}
+
+/** 子进程对象：只用到 stdout / stderr 与 close / error 事件 */
+interface NodeChildLike {
+	stdout: NodeReadableLike | null;
+	stderr: NodeReadableLike | null;
+	on(event: 'close', listener: (code: number | null) => void): unknown;
+	on(event: 'error', listener: (err: Error) => void): unknown;
+}
+
+interface NodeSpawnOptionsLike {
+	cwd?: string;
+	shell?: boolean;
+}
+
+type NodeSpawnLike = (
+	command: string,
+	args: string[],
+	options: NodeSpawnOptionsLike,
+) => NodeChildLike;
+
+// 桌面端调用本地 CLI。显式断言为本地最小接口，使其不依赖 @types/node 的类型解析。
+const spawnProcess = spawn as unknown as NodeSpawnLike;
+
 /**
  * 执行一个 Agent 任务，通过回调返回实时输出。
  * 只应在用户明确确认后调用。
+ *
+ * @param cwd 子进程工作目录（通常传入 vault 根目录）
  */
 export function runAgentTask(
 	task: AgentTask,
+	cwd: string,
 	callbacks: {
 		onOutput: (line: string) => void;
 		onComplete: (result: TaskResult) => void;
 		onError: (err: Error) => void;
 	},
-): ChildProcess {
-	const child = spawn(task.command, task.args, {
-		cwd: path.resolve('.'), // vault root
+): void {
+	const child = spawnProcess(task.command, task.args, {
+		cwd,
 		shell: true,
-		env: { ...process.env },
 	});
 
 	const output: string[] = [];
+	const decoder = new TextDecoder();
 
-	child.stdout?.on('data', (chunk: Buffer) => {
-		const text = chunk.toString();
+	const handleChunk = (chunk: Uint8Array): void => {
+		const text = decoder.decode(chunk, { stream: true });
 		output.push(text);
 		callbacks.onOutput(text);
-	});
+	};
 
-	child.stderr?.on('data', (chunk: Buffer) => {
-		const text = chunk.toString();
-		output.push(text);
-		callbacks.onOutput(text);
-	});
+	child.stdout?.on('data', handleChunk);
+	child.stderr?.on('data', handleChunk);
 
-	child.on('close', (code) => {
+	child.on('close', (code: number | null) => {
 		callbacks.onComplete({
 			id: task.id,
 			success: code === 0,
@@ -101,11 +131,9 @@ export function runAgentTask(
 		});
 	});
 
-	child.on('error', (err) => {
+	child.on('error', (err: Error) => {
 		callbacks.onError(err);
 	});
-
-	return child;
 }
 
 /**

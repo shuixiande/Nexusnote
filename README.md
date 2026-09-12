@@ -4,81 +4,74 @@
   <img src="assets/logo.svg" width="128" alt="Nexusnote">
 </div>
 
-> 【中文】【[English](English.md)】
+>【English】 【[中文](README.zh.md)】
 
-Obsidian 个人知识库仪表盘插件（Agent 操作中心）。在 Obsidian 内部提供一站式知识库概览与快速操作入口，帮助你以「四层知识库」结构管理个人资料。
+An Obsidian dashboard plugin for your personal knowledge base — an in-app **Agent Operation Center**. It gives you a one-stop overview and quick-action hub to manage your notes using a four-layer knowledge base structure.
 
-## 功能亮点
+## Features
 
-- **四层知识库方法论**：原始资料 → 创意想法 → 知识库 → 输出，让零散素材沉淀为结构化知识，而不是堆在收藏夹吃灰。
-- **Agent 操作中心**：仪表盘内一站式总览与快速操作，并可直接联动 Claudian 插件自动处理原料层，原始素材保持不动。
-- **可视化仪表盘**：仓库健康、笔记创建趋势（股市风格折线图）、日历视图一屏掌握 Vault 状态。
-- **零配置上手**：首次点击「一键部署知识库」即自动创建四层目录与 `agent.md` 规则文件，开箱即用。
+- **Dashboard overview** — Five stat cards (Vault health, raw materials, knowledge base, tasks, output) give you a single-screen snapshot of your Vault.
+- **Note creation trend** — A stock-ticker style line chart with 7-day / 30-day / 6-month / 1-year toggles; hover to see notes created per day.
+- **Recent updates** — Lists the most recently modified notes in your Vault; click to jump straight to them.
+- **Calendar view** — See note creation by day. Click a date to view that day's notes, or create that day's diary with one click.
+- **One-click knowledge base deploy** — On first click, automatically creates the four-layer folder structure and generates the `agent.md` rules file at the Vault root (structure below).
+- **Quick create**:
+  - New note / Idea — created in the "Ideas" folder from a template.
+  - New material — three modes: new from template / import from folder / import from file, copied into the raw-materials layer.
+- **Material ingest** — One click opens the Claudian plugin and hands the raw-material layer to it for processing (extract knowledge → knowledge base, inspirations → ideas, deliverables → output; original materials stay untouched).
+- **Settings entry** — Jump directly to the plugin settings page from the dashboard.
 
-## 功能特性
+## Knowledge base structure
 
-- **仪表盘概览**：仓库健康、原始资料、知识库、任务情况、输出 五项统计，一屏总览 Vault 状态。
-- **笔记创建趋势**：股市风格折线图，支持近 7 天 / 30 天 / 6 个月 / 1 年切换，悬停查看每日新建笔记数。
-- **最近更新**：列出 Vault 中最近修改的笔记，点击直达。
-- **日历视图**：按日查看笔记创建情况；点击日期可查看当天笔记，或一键新建当天日记。
-- **一键部署知识库**：首次点击自动创建四层知识库目录，并在仓库根目录生成 `agent.md` 规则文件（目录结构见下）。
-- **快速新建**：
-  - 新笔记 / 灵感 —— 基于模板在「创意想法」文件夹创建；
-  - 新素材 —— 支持「模板新建 / 从文件夹导入 / 从文件导入」三种方式，复制到原始资料层。
-- **素材入库**：一键打开 Claudian 插件并将原料层交给它处理（提取知识 → 知识库、灵感 → 创意想法、产出 → 输出，原始素材保持不变）。
-- **设置入口**：仪表盘内直接跳转插件设置页面。
+The knowledge base uses a four-layer structure (consistent with the `agent.md` rules):
 
-## 知识库目录结构约定
+1. `1_原始资料（不可变原料）` — Imported raw materials, kept immutable.
+2. `2_创意想法（灵感燃料）` — Ideas and works-in-progress.
+3. `3_知识库（AI接管Wiki）` — Structured knowledge.
+4. `4_输出（成品出口）` — Final deliverables.
 
-知识库采用四层结构（与 `agent.md` 规则一致）：
+Template files live in the `templater/` folder.
 
-1. `1_原始资料（不可变原料）` —— 导入的原始素材，保持不可变。
-2. `2_创意想法（灵感燃料）` —— 灵感与半成品。
-3. `3_知识库（AI接管Wiki）` —— 结构化知识。
-4. `4_输出（成品出口）` —— 最终成品。
+## Development
 
-模板文件存放于 `templater/` 文件夹。
+This project uses TypeScript for type checking and documentation.
 
-## 开发
+- `npm install` — install dependencies
+- `npm run dev` — esbuild watch dev mode (watches `src/` and compiles to `main.js`)
+- `npm run build` — type check + production build (outputs `main.js`)
+- `npm run lint` — ESLint check (includes `eslint-plugin-obsidianmd` rules)
 
-本项目使用 TypeScript 提供类型检查与文档。
+## Installation
 
-- `npm install` —— 安装依赖
-- `npm run dev` —— esbuild watch 开发模式（监听 `src/` 改动并编译到 `main.js`）
-- `npm run build` —— 类型检查 + 生产构建（输出 `main.js`）
-- `npm run lint` —— ESLint 检查（含 `eslint-plugin-obsidianmd` 规则）
+Nexusnote supports four installation methods, listed from most to least recommended.
 
-## 安装
+### Method 1: Community plugin marketplace (recommended)
 
-Nexusnote 支持以下四种安装方式，按推荐程度从高到低排列。
+1. Obsidian Settings → **Community plugins** → turn off **Restricted mode**.
+2. Click **Browse**, search for `Nexusnote`.
+3. Click **Install**, then **Enable** when finished.
 
-### 方式一：社区插件市场（推荐，待上架）
+> Nexusnote has been submitted to the official Obsidian community plugin directory and is awaiting review. If you cannot find it in **Browse** yet, please use Method 2 or 3 below.
 
-1. Obsidian 设置 → **社区插件** → 关闭「安全模式」。
-2. 点击 **浏览**，搜索 `Nexusnote`。
-3. 点击 **安装**，完成后点击 **启用**。
+### Method 2: BRAT (Beta Reviewer's Auto-update Tool)
 
-> 当前版本尚未提交至官方市场，请先用下方方式二 / 方式三。
+1. Install and enable **BRAT** from the community plugin marketplace.
+2. BRAT Settings → **Add Beta plugin**.
+3. Enter the repository: `shuixiande/Nexusnote`.
+4. Click **Add Plugin**, then enable Nexusnote when done.
+5. To update: BRAT Settings → **Update all beta plugins**.
 
-### 方式二：BRAT 安装（Beta Reviewer's Auto-update Tool）
+### Method 3: Manual install (download from GitHub Release)
 
-1. 在社区插件市场安装 **BRAT** 并启用。
-2. BRAT 设置 → **Add Beta plugin**。
-3. 输入仓库地址：`shuixiande/Nexusnote`。
-4. 点击 **Add Plugin**，完成后启用 Nexusnote。
-5. 更新：BRAT 设置 → **Update all beta plugins**。
+1. Open Releases: <https://github.com/shuixiande/Nexusnote/releases>
+2. Download the latest `main.js`, `manifest.json`, and `styles.css`.
+3. Copy them into your Vault's plugin folder (create it if missing):
+   `VaultFolder/.obsidian/plugins/nexusnote/`
+4. Settings → **Community plugins** → turn off **Restricted mode** → enable **Nexusnote**.
 
-### 方式三：手动安装（从 GitHub Release 下载）
+> `.obsidian` is a hidden directory. On Windows, type the path in the address bar; on macOS press `Cmd+Shift+.` to reveal hidden files.
 
-1. 打开 Releases：<https://github.com/shuixiande/Nexusnote/releases>
-2. 下载最新版本的 `main.js`、`manifest.json`、`styles.css`。
-3. 复制到 Vault 插件目录（没有则新建）：
-   `VaultFolder/.obsidian/plugins/Nexusnote/`
-4. 设置 → **社区插件** → 关闭「安全模式」→ 启用 **Nexusnote**。
-
-> `.obsidian` 是隐藏目录。Windows 在地址栏输入路径；macOS 按 `Cmd+Shift+.` 显示隐藏文件。
-
-### 方式四：从源码构建（开发者）
+### Method 4: Build from source (for developers)
 
 ```bash
 git clone https://github.com/shuixiande/Nexusnote.git
@@ -87,69 +80,72 @@ npm install
 npm run build
 ```
 
-构建产物 `main.js` 生成在根目录，与 `manifest.json`、`styles.css` 一起复制到 `VaultFolder/.obsidian/plugins/Nexusnote/`（同方式三第 3–4 步）。
+The built `main.js` is generated in the root directory. Copy it together with `manifest.json` and `styles.css` into `VaultFolder/.obsidian/plugins/nexusnote/` (same as steps 3–4 of Method 3).
 
-> 本仓库已纳入 `main.js`，可直接获取；但发布版本请以 GitHub Release 的三文件为准，确保与 `manifest.json` 版本一致。
+> This repository tracks `main.js`, so you can fetch it directly. For released versions, use the three files from the GitHub Release to stay in sync with the `manifest.json` version.
 
-### 知识库目录结构约定
+### Knowledge base folder structure
 
-首次使用时，在仪表盘点击 **一键部署知识库**，会自动创建四层目录（与 `agent.md` 规则一致）：
+On first use, click **One-click knowledge base deploy** on the dashboard — it automatically creates the four-layer folders (consistent with the `agent.md` rules):
 
-| 层级 | 文件夹 | 用途 |
-|------|--------|------|
-| 1 | `1_原始资料（不可变原料）` | 导入的原始素材，保持不可变 |
-| 2 | `2_创意想法（灵感燃料）` | 灵感与半成品 |
-| 3 | `3_知识库（AI接管Wiki）` | 结构化知识 |
-| 4 | `4_输出（成品出口）` | 最终成品 |
+| Layer | Folder | Purpose |
+|-------|--------|---------|
+| 1 | `1_原始资料（不可变原料）` | Imported raw materials, kept immutable |
+| 2 | `2_创意想法（灵感燃料）` | Ideas and works-in-progress |
+| 3 | `3_知识库（AI接管Wiki）` | Structured knowledge |
+| 4 | `4_输出（成品出口）` | Final deliverables |
 
-模板文件存放于 `templater/`。
+Template files live in `templater/`.
 
-### 首次使用建议
+### First-use suggestions
 
-1. 命令面板（`Ctrl/Cmd + P`）运行 **Nexusnote: 打开仪表盘**。
-2. 点击 **一键部署知识库**，生成四层目录与 `agent.md`。
-3. 用 **新笔记 / 灵感 / 新素材** 填充内容。
-4. 用 **素材入库** 调用 Claudian 插件对原料层做智能处理。
+1. Open the command palette (`Ctrl/Cmd + P`) and run **Nexusnote: Open dashboard**.
+2. Click **One-click knowledge base deploy** to generate the four-layer folders and `agent.md`.
+3. Use **New note / Idea / Material** to fill in content.
+4. Use **Material ingest** to invoke the Claudian plugin for intelligent processing of the raw-material layer.
 
-### 常见问题
+### FAQ
 
-- **启用提示「未通过安全模式」？** 设置 → 社区插件 → 关闭「安全模式」再启用。
-- **仪表盘打不开？** 确认 Obsidian ≥ 1.8.0（manifest 的 `minAppVersion`）。
-- **更新后界面没变化？** BRAT 用户运行「Update all beta plugins」；手动用户重新下载三文件覆盖并重启 Obsidian。
-- **能删 `agent.md` 吗？** 能，重新点击「一键部署知识库」会重新生成。
+- **Enabling shows "not in safe mode"?** Settings → Community plugins → turn off **Restricted mode**, then enable again.
+- **Dashboard won't open?** Make sure Obsidian ≥ 1.8.0 (the `minAppVersion` in the manifest).
+- **No change after updating?** BRAT users run "Update all beta plugins"; manual users re-download and overwrite the three files, then restart Obsidian.
+- **Can I delete `agent.md`?** Yes. Clicking **One-click knowledge base deploy** again will regenerate it.
 
-### 卸载
+### Uninstall
 
-设置 → 社区插件 → 已安装 → Nexusnote → **禁用 / 卸载**。插件不删除 Vault 内容，仅移除仪表盘功能与生成的 `templater/`、`agent.md`。
+Settings → Community plugins → Installed → Nexusnote → **Disable / Uninstall**. The plugin does not delete any Vault content; it only removes the dashboard feature and the generated `templater/` and `agent.md`.
 
-## 发布新版本
+## Releasing a new version
 
-1. 在 `manifest.json` 更新版本号与所需最低 Obsidian 版本。
-2. 在 `versions.json` 增加 `"新版本号": "最低obsidian版本"` 条目。
-3. 以版本号作为 Tag 创建 GitHub Release，上传 `manifest.json`、`main.js`、`styles.css`。
+1. Update the version number and minimum required Obsidian version in `manifest.json`.
+2. Add an entry `"new-version": "minimum-obsidian-version"` in `versions.json`.
+3. Create a GitHub Release tagged with the version number, uploading `manifest.json`, `main.js`, and `styles.css`.
 
-<a id="sponsor"></a>
+## Buy me a coffee ☕
 
-## 请我喝杯咖啡 ☕
+If this plugin helps with your knowledge management, feel free to buy me a coffee ☕ — your support keeps me maintaining it.
 
-如果这个插件对你的知识管理有帮助，欢迎请我喝杯咖啡 ☕，你的支持是我持续维护的动力。
+| WeChat Pay | Alipay |
+|------------|--------|
+| ![WeChat QR](assets/wechat-pay.jpg) | ![Alipay QR](assets/alipay-pay.jpg) |
 
-| 微信支付 | 支付宝 |
-|----------|--------|
-| ![微信收款码](assets/wechat-pay.jpg) | ![支付宝收款码](assets/alipay-pay.jpg) |
+> Scan the QR codes above to buy me a coffee ☕ via WeChat Pay or Alipay.
 
-> 扫描上方二维码即可通过微信或支付宝请我喝杯咖啡 ☕。
+## License
 
-## 许可证
+This project is licensed under the **Creative Commons Attribution-NonCommercial
+4.0 International (CC BY-NC 4.0)** license.
 
-本项目采用 **Creative Commons Attribution-NonCommercial 4.0 International（CC BY-NC 4.0）** 许可证。
+- **You may**: freely view, copy, share, and modify the source code for
+  **personal, non-commercial** use.
+- **You must**: retain original attribution and indicate if you modified it.
+- **You may NOT**: use this project for any **commercial purpose** (including
+  but not limited to selling, paid distribution, or embedding in a commercial
+  product).
 
-- **你可以**：免费查看、复制、分享、修改本插件源码，用于**个人非商业**用途。
-- **你必须**：保留原作者署名，并标注是否做了修改。
-- **你不能**：将本项目用于任何**商业目的**（包括但不限于售卖、付费分发、嵌入商业产品）。
+The full terms are in the [`LICENSE`](LICENSE) file at the repository root.
+For commercial licensing, please contact the author separately.
 
-完整条款见仓库根目录的 [`LICENSE`](LICENSE) 文件。如需商业授权，请单独联系作者。
+## API documentation
 
-## API 文档
-
-参见 https://docs.obsidian.md
+See https://docs.obsidian.md

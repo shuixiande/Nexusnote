@@ -662,8 +662,8 @@ class NexusnoteDashboardView extends ItemView {
 		if (!target) return false;
 
 		// 写入文本：textarea/input 用原生 setter + input 事件（兼容 React/Vue 受控组件）；contenteditable 直接写内容
-		if (target instanceof HTMLTextAreaElement || target instanceof HTMLInputElement) {
-			const proto = target instanceof HTMLTextAreaElement
+		if (target.instanceOf(HTMLTextAreaElement) || target.instanceOf(HTMLInputElement)) {
+			const proto = target.instanceOf(HTMLTextAreaElement)
 				? HTMLTextAreaElement.prototype
 				: HTMLInputElement.prototype;
 			// eslint-disable-next-line @typescript-eslint/unbound-method -- 需调用原生 value setter 以兼容受控组件
@@ -1455,10 +1455,9 @@ export default class NexusnotePlugin extends Plugin {
 	 */
 	openRelease(url: string): void {
 		if (!url) return;
-		const a = document.createElement('a');
-		a.href = url;
-		a.target = '_blank';
-		a.rel = 'noopener noreferrer';
+		const a = createEl('a', {
+			attr: { href: url, target: '_blank', rel: 'noopener noreferrer' },
+		});
 		document.body.appendChild(a);
 		a.click();
 		a.remove();
