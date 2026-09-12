@@ -1,7 +1,7 @@
 {
 	"id": "nexusnote",
 	"name": "Nexusnote",
-	"version": "0.1.8",
+	"version": "0.1.9",
 	"minAppVersion": "1.8.0",
 	"description": "A dashboard for tracking AI agent workflows, sessions, and outputs in your vault.",
 	"author": "AIteSn",
