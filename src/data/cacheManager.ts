@@ -1,15 +1,15 @@
 /* ============================================================
    Nexusnote — 本地缓存管理器
    外部数据先写入 vault 内的 JSON cache 文件，Dashboard 再读取展示
-   缓存路径：{configDir}/plugins/Nexusnote/cache/
-   （遵循 Obsidian 插件数据存储惯例，不污染 vault 根目录）
+   缓存路径：{configDir}/plugins/{插件ID}/cache/
+   （插件 ID 取自 manifest，遵循 Obsidian 插件数据存储惯例，不污染 vault 根目录）
    ============================================================ */
 
-import { App, TFile } from 'obsidian';
+import { Plugin, TFile } from 'obsidian';
 
-/** 获取缓存目录路径（使用 Vault#configDir 而非硬编码 `.obsidian`） */
-function getCacheDir(app: App): string {
-	return `${app.vault.configDir}/plugins/Nexusnote/cache`;
+/** 获取缓存目录路径（ID 取自 manifest，避免硬编码插件 ID 或 `.obsidian`） */
+function getCacheDir(plugin: Plugin): string {
+	return `${plugin.app.vault.configDir}/plugins/${plugin.manifest.id}/cache`;
 }
 
 export interface CacheEntry<T> {
@@ -18,8 +18,9 @@ export interface CacheEntry<T> {
 }
 
 /** 从缓存读取数据 */
-export async function readCache<T>(app: App, cacheName: string): Promise<T | null> {
-	const path = `${getCacheDir(app)}/${cacheName}`;
+export async function readCache<T>(plugin: Plugin, cacheName: string): Promise<T | null> {
+	const app = plugin.app;
+	const path = `${getCacheDir(plugin)}/${cacheName}`;
 	const file = app.vault.getAbstractFileByPath(path);
 	if (!(file instanceof TFile)) return null;
 	try {
@@ -32,8 +33,9 @@ export async function readCache<T>(app: App, cacheName: string): Promise<T | nul
 }
 
 /** 写入缓存（需用户确认后才可调用） */
-export async function writeCache<T>(app: App, cacheName: string, data: T): Promise<void> {
-	const cacheDir = getCacheDir(app);
+export async function writeCache<T>(plugin: Plugin, cacheName: string, data: T): Promise<void> {
+	const app = plugin.app;
+	const cacheDir = getCacheDir(plugin);
 	const path = `${cacheDir}/${cacheName}`;
 	const entry: CacheEntry<T> = {
 		updated: new Date().toISOString(),
@@ -59,8 +61,9 @@ export async function writeCache<T>(app: App, cacheName: string, data: T): Promi
 }
 
 /** 获取上次缓存时间 */
-export async function getCacheUpdated(app: App, cacheName: string): Promise<string | null> {
-	const path = `${getCacheDir(app)}/${cacheName}`;
+export async function getCacheUpdated(plugin: Plugin, cacheName: string): Promise<string | null> {
+	const app = plugin.app;
+	const path = `${getCacheDir(plugin)}/${cacheName}`;
 	const file = app.vault.getAbstractFileByPath(path);
 	if (!(file instanceof TFile)) return null;
 	try {
